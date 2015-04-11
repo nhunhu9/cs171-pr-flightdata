@@ -25,7 +25,7 @@ WorldMap.prototype.initVis = function(){
     }
   });
 
-  this.wrangleData();
+  this.wrangleData(/*function(d) { return d.origin.country == "Germany" || d.destination.country == "Germany" }*/);
 
   this.updateVis();
 }
@@ -33,6 +33,7 @@ WorldMap.prototype.initVis = function(){
 
 WorldMap.prototype.wrangleData= function(_filterFunction){
   this.displayData = this.filterAndAggregate(_filterFunction);
+  debugger;
 }
 
 WorldMap.prototype.filterAndAggregate = function(_filter){
@@ -41,7 +42,9 @@ WorldMap.prototype.filterAndAggregate = function(_filter){
 
     var that = this;
 
-    return this.data;
+    return this.data.filter(function(d) {
+      return filter(d);
+    });
 
 }
 
