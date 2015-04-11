@@ -14,18 +14,22 @@ WorldMap.prototype.initVis = function(){
 
   var that = this; 
 
+  this.arc_color_scale =  d3.scale.log()
+      .range(["red", "blue", "black"]);
+
   this.map =  new Datamap({
     element: document.getElementById("worldmap"),
     projection: "mercator",
     arcConfig: {
       strokeColor: "#00BFFF",
-      strokeWidth: 1,
+      strokeWidth: 0.2,
       arcSharpness: 1.4,
-      animationSpeed: 600
+      animationSpeed: 500
     }
   });
 
-  this.wrangleData(/*function(d) { return d.origin.country == "Germany" || d.destination.country == "Germany" }*/);
+  this.wrangleData(function(d) { return d.origin.country == "China" //|| d.destination.country == "China" 
+                                        && d.origin.country != d.destination.country});
 
   this.updateVis();
 }
@@ -33,25 +37,40 @@ WorldMap.prototype.initVis = function(){
 
 WorldMap.prototype.wrangleData= function(_filterFunction){
   this.displayData = this.filterAndAggregate(_filterFunction);
-  debugger;
 }
 
 WorldMap.prototype.filterAndAggregate = function(_filter){
 
     var filter = _filter || function(){return true;}
 
+
     var that = this;
 
-    return this.data.filter(function(d) {
+    var res =  this.data.filter(function(d) {
       return filter(d);
     });
+
+    return res;
 
 }
 
 
 
 WorldMap.prototype.updateVis = function(){
-  this.map.arc(this.data);
+  var that = this;
+
+  this.arc_color_scale.domain(d3.extent(this.displayData, function(l) {
+      return l.number_of_routes;
+     }))
+
+
+  this.displayData.forEach(function(d){
+    d.options = {};
+    d.options.strokeColor = that.arc_color_scale(d.number_of_routes);
+   // d.options.greatArc = true;
+  })
+
+  this.map.arc(this.displayData);
 
   /*this.map.arc([
     {

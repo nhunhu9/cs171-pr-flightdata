@@ -92,32 +92,44 @@
                                     number_of_routes: parseInt(d["number_of_routes"])
                                 };
                             }
-                    )
+                        )
+                    
+                     
+/*                      var citiesToCities = [];
+                        console.log("start filter")
+                        //TODO: make more efficient 
+                        //remove duplicate items in dataset (i.e. MUC->BOS and BOS->MUC)
+                        citiesToCities_with_duplicates.forEach(function(a){
 
-                    metaDataCities = _metaDataCities.map(function (d) {
-                        //TODO: parse ints and booleans
+                            if (citiesToCities.filter(function(b) { return b.destination == a.origin && b.origin == a.destination}).length < 1)
+                                citiesToCities.push(a);
+                        });
+                        
+                        console.log("stop filter")*/
+    
+                        metaDataCities = _metaDataCities.map(function (d) {
+                            //TODO: parse ints and booleans
 
-                        return {
-                            name: d["city_name"],
-                            country: d["country_name"],
-                            most_active_airport: {
-                                name: d["most_active_airport"],
-                                longitude: d["long_most_active_airport"],
-                                latitude: d["lat_most_active_airport"],
-                            },
+                            return {
+                                name: d["city_name"],
+                                country: d["country_name"],
+                                most_active_airport: {
+                                    name: d["most_active_airport"],
+                                    longitude: d["long_most_active_airport"],
+                                    latitude: d["lat_most_active_airport"],
+                                },
 
-                            avg_distance: parseInt(d["average_distance"]),
-                            max_distance: parseInt(d["max._distance"]),
-                            number_incoming_domestic_flights: parseInt(d["number_incoming_domestic_flights"]),
-                            number_incoming_flights: parseInt(d["number_incoming_flights"]),
-                            number_incoming_international_flights: parseInt(d["number_incoming_international_flights"]),
-                            number_of_routes: parseInt(d["number_of_routes"]),
-                            number_outcoming_domestic_flights: parseInt(d["number_outcoming_domestic_flights"]),
-                            number_outcoming_flights: parseInt(d["number_outcoming_flights"]),
-                            number_outcoming_international_flights: parseInt(d["number_outcoming_international_flights"]),
-                            only_domestic_flights: (d["only_domestic_flights"] == 1 ? true : false)
-                        }
-                      
+                                avg_distance: parseInt(d["average_distance"]),
+                                max_distance: parseInt(d["max._distance"]),
+                                number_incoming_domestic_flights: parseInt(d["number_incoming_domestic_flights"]),
+                                number_incoming_flights: parseInt(d["number_incoming_flights"]),
+                                number_incoming_international_flights: parseInt(d["number_incoming_international_flights"]),
+                                number_of_routes: parseInt(d["number_of_routes"]),
+                                number_outcoming_domestic_flights: parseInt(d["number_outcoming_domestic_flights"]),
+                                number_outcoming_flights: parseInt(d["number_outcoming_flights"]),
+                                number_outcoming_international_flights: parseInt(d["number_outcoming_international_flights"]),
+                                only_domestic_flights: (d["only_domestic_flights"] == 1 ? true : false)
+                            } 
                     });
 
                     initVis();
