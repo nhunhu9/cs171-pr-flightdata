@@ -11,6 +11,9 @@
     <script src="libs/bootstrap/js/bootstrap.min.js" charset="utf-8"></script>
 	<script src="http://d3js.org/queue.v1.min.js" charset="utf-8"></script>
 
+    <script src="//cdnjs.cloudflare.com/ajax/libs/topojson/1.6.9/topojson.min.js"></script>
+    <script src="libs/datamaps/datamaps.world.min.js"></script>
+
 
     <!--Stylesheets-->
     <link rel="stylesheet" type="text/css" href="libs/bootstrap/css/bootstrap.min.css">
@@ -36,7 +39,7 @@
         </div>
 
         <div class="row">
-            <div class="col-md-9" id="countVis"></div>
+            <div id="worldmap" class="col-md-8"></div>
         </div>
     </div>
 
@@ -78,6 +81,8 @@
             }
 
             var dataLoaded = function (error, _allData, _metaData) {
+
+                var map = new Datamap({element: document.getElementById('worldmap')});
 
                 if (!error) {
 
