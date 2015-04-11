@@ -14,7 +14,16 @@ WorldMap.prototype.initVis = function(){
 
   var that = this; 
 
-  this.map =  new Datamap({element: document.getElementById('worldmap')});
+  this.map =  new Datamap({
+    element: document.getElementById("worldmap"),
+    projection: "mercator",
+    arcConfig: {
+      strokeColor: "#00BFFF",
+      strokeWidth: 1,
+      arcSharpness: 1.4,
+      animationSpeed: 600
+    }
+  });
 
   this.wrangleData();
 
@@ -22,10 +31,18 @@ WorldMap.prototype.initVis = function(){
 }
 
 
+WorldMap.prototype.wrangleData= function(_filterFunction){
+  this.displayData = this.filterAndAggregate(_filterFunction);
+}
 
+WorldMap.prototype.filterAndAggregate = function(_filter){
 
-WorldMap.prototype.wrangleData= function(){
-  this.displayData = this.data;
+    var filter = _filter || function(){return true;}
+
+    var that = this;
+
+    return this.data;
+
 }
 
 
