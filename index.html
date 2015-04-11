@@ -1,0 +1,139 @@
+<!DOCTYPE html>
+<html>
+<head lang="en">
+    <meta charset="UTF-8">
+    <title>Final Project</title>
+
+    <!-- ADD Libraries-->
+    <script src="libs/d3/d3.min.js" charset="utf-8"></script>
+    <script src="libs/d3/d3.svg.multibrush.js" charset="utf-8"></script>
+    <script src="libs/jquery/jquery-2.1.1.min.js" charset="utf-8"></script>
+    <script src="libs/bootstrap/js/bootstrap.min.js" charset="utf-8"></script>
+	<script src="http://d3js.org/queue.v1.min.js" charset="utf-8"></script>
+
+
+    <!--Stylesheets-->
+    <link rel="stylesheet" type="text/css" href="libs/bootstrap/css/bootstrap.min.css">
+
+    <!-- Get some nice font-->
+    <link href='http://fonts.googleapis.com/css?family=PT+Sans:400,700' rel='stylesheet' type='text/css'>
+
+    <script src = "js/worldmap.js"></script>
+
+    <!-- add own stylesheet-->
+    <link rel="stylesheet" type="text/css" href="css/myStyle.css">
+
+</head>
+<body>
+    <div class="container">
+        <h1>Final Project</h1>
+
+        <div class="row">
+            <div class="col-md-8 col-sm-12">
+               <p> Lorempisum.</p>
+            </div>
+
+        </div>
+
+        <div class="row">
+            <div class="col-md-9" id="countVis"></div>
+        </div>
+    </div>
+
+
+
+    <script>
+        $(function(){ 
+
+
+            var allData = [];
+            var metaData = {};
+
+            var dateFormatter = d3.time.format("%Y-%m-%d");
+
+
+            var initVis = function(){
+
+                var MyEventHandler = new Object();
+
+
+                var worldmap = new WorldMap(d3.select("#worldmap"), allData, metaData, MyEventHandler);
+          
+                 $(MyEventHandler).bind("selectionChanged", function(event, brush){
+                      var ranges = brush.extent();
+
+                        if (ranges.length == 1)
+                            d3.select("#brushInfo").text(dateFormat(ranges[0][0]) + " -> " + dateFormat(ranges[0][1]))
+                        else if (ranges.length == 2)
+                            d3.select("#brushInfo").text(dateFormat(ranges[0][0]) + " -> " + dateFormat(ranges[0][1]) + "  &  " + dateFormat(ranges[1][0]) + " -> " + dateFormat(ranges[1][1]))
+                        else
+                            d3.select("#brushInfo").text("")
+
+                      age_vis.onSelectionChange(ranges);
+                      prio_vis.onSelectionChange(ranges);
+                      count_vis.onSelectionChange(ranges);
+                    
+                  });
+
+            }
+
+            var dataLoaded = function (error, _allData, _metaData) {
+
+                if (!error) {
+
+                       allData = _allData.map(function (d) {
+                                var res = {
+                                    time: dateFormatter.parse(d.day),
+                                    count: parseInt(d["count(*)"])
+                                };
+
+                              
+                                // TODO: implement that  !!
+                                res.prios = d3.range(0,16).map(function(i){return d["sum(p"+i+")"]});
+
+
+                                // There are also some age fields with no age specified ("") i ignore them, because I think it does not make sense to plot them.
+            
+                                res.ages = [];
+                                d.age.forEach(function(n){
+                                     if(Number.isInteger(n["age"]) && n["age"] < 123) //Oldest person alive was ~123
+                                        res.ages[n["age"]]=n["count(*)"];
+                                 })     
+
+                                res.ages = d3.range(0, d3.max([100,res.ages.length])).map(function(i){
+                                        return res.ages[i] || 0;
+                                });  
+
+                                return res;
+                            }
+                    )
+
+                    metaData = _metaData;
+                    initVis();
+                }
+            }
+			
+			
+			// HELPERS 
+
+
+            var dateFormat = d3.time.format("%Y-%m-%d");
+			
+			 var aggregateCountsForRange = function(from, to){
+				 return d3.sum(allData.filter(function(d){return d.time>=from && d.time<=to;}), function(d){return d.count;})
+        	}
+
+            var startHere = function(){
+
+            	queue()
+				.defer(d3.json, 'data/perDayData.json') 
+				.defer(d3.json, 'data/MYWorld_fields.json') 
+				.await(dataLoaded);
+
+            }
+
+            startHere();
+        })
+    </script>
+</body>
+</html>
