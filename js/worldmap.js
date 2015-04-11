@@ -48,6 +48,35 @@ WorldMap.prototype.filterAndAggregate = function(_filter){
 
 
 WorldMap.prototype.updateVis = function(){
+  this.map.arc(this.data);
+
+  /*this.map.arc([
+    {
+        origin: {
+            latitude: 30.194444,
+            longitude: -97.67
+        },
+        destination: {
+            latitude: 25.793333,
+            longitude: -80.290556
+        },
+        test: {test2: "abc"},
+        options: {
+          strokeWidth: 0.2,
+  greatArc: true
+        }
+    },
+    {
+        origin: {
+            latitude: 39.861667,
+            longitude: -104.673056
+        },
+        destination: {
+            latitude: 35.877778,
+            longitude: -78.7875
+        }
+    }
+]);*/
 }
 
 

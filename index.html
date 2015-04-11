@@ -75,15 +75,15 @@
 
                        citiesToCities = _citiesToCities.map(function (d) {
                                 return {
-                                    departure_city: { 
-                                        name: d["departure_city"],
+                                    origin: { 
+                                        city: d["departure_city"],
                                         longitude: parseFloat(d["long_departure_(decimal)"]),
                                         latitude: parseFloat(d["lat_departure_(decimal)"]),
                                         country: d["departure_country"]
                                     },
 
-                                    arrival_city: {
-                                        name: d["arrival_city"],
+                                    destination: {
+                                        city: d["arrival_city"],
                                         longitude: parseFloat(d["long_arrival_(decimal)"]),
                                         latitude: parseFloat(d["lat_arrival_(decimal)"]),
                                         country: d["arrival_country"]
