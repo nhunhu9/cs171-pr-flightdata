@@ -19,7 +19,7 @@ WorldMap.prototype.initVis = function(){
 
   this.zoomBehavior = d3.behavior.zoom();
 
-  this.map =  new Datamap({
+ this.map =  new Datamap({
     element: document.getElementById("worldmap"),
     projection: "mercator",
     arcConfig: {
@@ -28,6 +28,10 @@ WorldMap.prototype.initVis = function(){
       arcSharpness: 1.4,
       animationSpeed: 500
     },
+   zoomConfig: {
+            zoomOnClick: true,
+            zoomFactor: 0.9
+    },
     done: function(datamap) {
        datamap.svg.call(that.zoomBehavior.on("zoom", redraw));
 
@@ -35,11 +39,36 @@ WorldMap.prototype.initVis = function(){
               datamap.svg.selectAll("g").attr("transform", "translate(" + d3.event.translate + ")scale(" + d3.event.scale + ")");
          }
     }
+
   });
 
-  this.addResetZoomButton(this.parentElement)
+/*
+    this.map = new Datamap({
+    element: document.getElementById('worldmap'),
+    geographyConfig: {
+      dataUrl: 'data/custom_maps/ne_10m_admin_1_states_provinces/json/DEU.topo.json'
+    },
+    scope: 'DEU',
+    fills: {
+      defaultFill: '#bada55',
+      someKey: '#fa0fa0'
+    },
+    setProjection: function(element) {
+      var projection = d3.geo.mercator()
+        .scale(100)
+        .translate([element.offsetWidth / 2, element.offsetHeight / 2]);
 
-  this.wrangleData(function(d) { return d.origin.country == "Germany" //|| d.destination.country == "China" 
+       var path = d3.geo.path().projection(projection);
+       return {path: path, projection: projection};
+    }
+  });
+*/
+
+  this.addResetZoomButton(this.parentElement);
+
+  this.addFocusCountryButton("usa", this.parentElement);
+
+  this.wrangleData(function(d) { return d.origin.city == "New York" //|| d.destination.country == "China" 
                                         && d.origin.country != d.destination.country});
 
   this.updateVis();
@@ -121,7 +150,7 @@ WorldMap.prototype.addResetZoomButton = function(container){
 
     var button = container.insert("button", ":first-child")
       .attr("class", "btn btn-sm btn-primary")
-      .text("Reset Zoom")
+      .text("⇔ Reset Zoom")
       .on("click", function() {
         that.zoomBehavior.scale(1);
         that.zoomBehavior.translate([0, 0]);
@@ -131,6 +160,20 @@ WorldMap.prototype.addResetZoomButton = function(container){
           .attr("transform", "translate(" + that.zoomBehavior.translate() + ")scale(" + that.zoomBehavior.scale() + ")");
       })
 }
+
+
+WorldMap.prototype.addFocusCountryButton = function(country, container){
+    var that = this;
+
+    var button = container.insert("button", ":first-child")
+      .attr("class", "btn btn-sm btn-primary")
+      .text("Focus on " + country)
+      .on("click", function() {
+        that.map.scope = country;
+      
+      })
+}
+
 
 
 // HELPERS
