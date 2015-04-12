@@ -73,42 +73,39 @@
 
                 if (!error) {
 
-                       console.log("start filter")
-                       var citiesToCities = [];
-                       var added_routes = []; //for performance reasons, but still too slow
+                       citiesToCities = _citiesToCities.map(function (d) {
+                                return {
+                                    origin: { 
+                                        city: d["departure_city"],
+                                        longitude: parseFloat(d["long_departure_(decimal)"]),
+                                        latitude: parseFloat(d["lat_departure_(decimal)"]),
+                                        country: d["departure_country"]
+                                    },
 
-                    
-                        _citiesToCities.forEach(function (d) {
-                                //if (added_routes.filter(function(b) { return b.destination == d["departure_city"] && b.origin == d["arrival_city"]}).length == 0) {
-                             
-                                    citiesToCities.push({
-                                        origin: { 
-                                            city: d["departure_city"],
-                                            longitude: parseFloat(d["long_departure_(decimal)"]),
-                                            latitude: parseFloat(d["lat_departure_(decimal)"]),
-                                            country: d["departure_country"]
-                                        },
+                                    destination: {
+                                        city: d["arrival_city"],
+                                        longitude: parseFloat(d["long_arrival_(decimal)"]),
+                                        latitude: parseFloat(d["lat_arrival_(decimal)"]),
+                                        country: d["arrival_country"]
+                                    },
 
-                                        destination: {
-                                            city: d["arrival_city"],
-                                            longitude: parseFloat(d["long_arrival_(decimal)"]),
-                                            latitude: parseFloat(d["lat_arrival_(decimal)"]),
-                                            country: d["arrival_country"]
-                                        },
-
-                                        number_of_routes: parseInt(d["number_of_routes"])
-                                    });
-
-                                    added_routes.push({destination: d["departure_city"], origin: d["arrival_city"]});
-                               // }
+                                    number_of_routes: parseInt(d["number_of_routes"])
+                                };
                             }
-                        );
-
-                        citiesToCities = citiesToCities.map(function(d) {return d; });
+                        )
                     
                      
-                    
-                        console.log("stop filter")
+/*                      var citiesToCities = [];
+                        console.log("start filter")
+                        //TODO: make more efficient 
+                        //remove duplicate items in dataset (i.e. MUC->BOS and BOS->MUC)
+                        citiesToCities_with_duplicates.forEach(function(a){
+
+                            if (citiesToCities.filter(function(b) { return b.destination == a.origin && b.origin == a.destination}).length < 1)
+                                citiesToCities.push(a);
+                        });
+                        
+                        console.log("stop filter")*/
     
                         metaDataCities = _metaDataCities.map(function (d) {
             
