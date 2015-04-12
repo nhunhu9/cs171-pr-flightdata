@@ -33,16 +33,22 @@ WorldMap.prototype.initVis = function(){
             zoomFactor: 0.9
     },
     done: function(datamap) {
-       datamap.svg.call(that.zoomBehavior.on("zoom", redraw));
+      // Pan & Zoom
+      datamap.svg.call(that.zoomBehavior.on("zoom", redraw));
 
-         function redraw() {
-              datamap.svg.selectAll("g").attr("transform", "translate(" + d3.event.translate + ")scale(" + d3.event.scale + ")");
-         }
-    }
-
+      function redraw() {
+        datamap.svg.selectAll("g").attr("transform", "translate(" + d3.event.translate + ")scale(" + d3.event.scale + ")");
+      }
+    },
+    subunitClick: function(g) {
+        console.log(g.properties.name);          
+    },
+    subunitMouseover: function(g) {
+        console.log(g.properties.name);        
+      } 
   });
 
-/*
+/* Custom Map
     this.map = new Datamap({
     element: document.getElementById('worldmap'),
     geographyConfig: {

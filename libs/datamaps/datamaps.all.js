@@ -12,6 +12,8 @@
     projection: 'equirectangular',
     dataType: 'json',
     done: function() {},
+    subunitClick: function() {},
+    subunitMouseover: function() {},
     fills: {
       defaultFill: '#ABDDA4'
     },
@@ -202,11 +204,16 @@
             if ( ! /((MSIE)|(Trident))/.test ) {
              moveToFront.call(this);
             }
+
+
+            self.options.subunitMouseover(d);
           }
 
           if ( options.popupOnHover ) {
             self.updatePopup($this, d, options, svg);
           }
+
+
         })
         .on('mouseout', function() {
           var $this = d3.select(this);
@@ -225,7 +232,10 @@
     
     if ( this.options.zoomConfig.zoomOnClick ) {
       svg.selectAll('.datamaps-subunit')
-        .on('click', function(d) { clickZoom.call(self, d) });
+        .on('click', function(d) { 
+          clickZoom.call(self, d);
+          self.options.subunitClick(d);
+        });
     }
 
     function moveToFront() {
@@ -505,7 +515,7 @@
 
   }
 
-  function clickZoom(d) {
+ function clickZoom(d) {
     var self = this,
         zoomFactor  = self.options.zoomConfig.zoomFactor,
         width   = self.options.element.clientWidth,
