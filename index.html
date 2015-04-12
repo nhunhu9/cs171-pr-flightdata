@@ -146,8 +146,8 @@
             var startHere = function(){
 
             	queue()
-				.defer(d3.csv, 'data/citiesToCities.csv') 
-				.defer(d3.csv, 'data/citiesTable.csv') 
+				.defer(d3.csv, 'data/openflight_db/citiesToCities.csv') 
+				.defer(d3.csv, 'data/openflight_db/citiesTable.csv') 
 				.await(dataLoaded);
 
             }
