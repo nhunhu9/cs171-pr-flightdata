@@ -83,9 +83,9 @@ WorldMap.prototype.initVis = function(){
   });
 */
 
-  //this.addResetZoomButton(this.parentElement);
+  this.addResetZoomButton(this.parentElement);
 
-  this.addFocusCountryButton("usa", this.parentElement);
+  //this.addFocusCountryButton("usa", this.parentElement);
 
   this.wrangleData(function(d) { return d.origin.city == "New York" //|| d.destination.country == "China" 
                                         && d.origin.country != d.destination.country});
@@ -100,7 +100,7 @@ WorldMap.prototype.wrangleData= function(_filterFunction){
 
 WorldMap.prototype.filterAndAggregate = function(_filter){
 
-    var filter = _filter || function(){return true;}
+    var filter = _filter || function(){return false;}
 
 
     var that = this;
@@ -130,34 +130,6 @@ WorldMap.prototype.updateVis = function(){
   })
 
   this.map.arc(this.displayData);
-
-  /*this.map.arc([
-    {
-        origin: {
-            latitude: 30.194444,
-            longitude: -97.67
-        },
-        destination: {
-            latitude: 25.793333,
-            longitude: -80.290556
-        },
-        test: {test2: "abc"},
-        options: {
-          strokeWidth: 0.2,
-  greatArc: true
-        }
-    },
-    {
-        origin: {
-            latitude: 39.861667,
-            longitude: -104.673056
-        },
-        destination: {
-            latitude: 35.877778,
-            longitude: -78.7875
-        }
-    }
-]);*/
 }
 
 
