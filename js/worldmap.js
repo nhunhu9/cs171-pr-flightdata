@@ -41,11 +41,24 @@ WorldMap.prototype.initVis = function(){
       }
     },
     subunitClick: function(g) {
-        console.log(g.properties.name);          
+        console.log("clicked " + g.properties.name); 
+
+       // that.wrangleData(function(d) { return d.origin.country == g.properties.name  && d.origin.country == d.destination.country});
+       // that.updateVis();               
     },
-    subunitMouseover: function(g) {
-        console.log(g.properties.name);        
-      } 
+   subunitMouseover: function(g) {
+        console.log("hovered " + g.properties.name);  
+
+        that.wrangleData(function(d) { return d.origin.country == g.properties.name 
+                                        && d.origin.country != d.destination.country});
+        that.updateVis();      
+    },
+    subunitMouseout: function() {
+      //TODO: set a default filter 
+      that.wrangleData(null);
+      that.updateVis();
+       
+    } 
   });
 
 /* Custom Map
@@ -70,7 +83,7 @@ WorldMap.prototype.initVis = function(){
   });
 */
 
-  this.addResetZoomButton(this.parentElement);
+  //this.addResetZoomButton(this.parentElement);
 
   this.addFocusCountryButton("usa", this.parentElement);
 

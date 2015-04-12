@@ -14,6 +14,7 @@
     done: function() {},
     subunitClick: function() {},
     subunitMouseover: function() {},
+    subunitMouseout: function() {},
     fills: {
       defaultFill: '#ABDDA4'
     },
@@ -227,6 +228,8 @@
           }
           $this.on('mousemove', null);
           d3.selectAll('.datamaps-hoverover').style('display', 'none');
+
+          self.options.subunitMouseout();
         });
     }
     
@@ -2584,7 +2587,7 @@
             }, {
                 "type": "MultiPolygon",
                 "properties": {
-                    "name": "United States of America"
+                    "name": "United States"
                 },
                 "id": "USA",
                 "arcs": [
