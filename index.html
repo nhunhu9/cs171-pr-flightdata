@@ -12,7 +12,7 @@
 	<script src="http://d3js.org/queue.v1.min.js" charset="utf-8"></script>
 
     <script src="//cdnjs.cloudflare.com/ajax/libs/topojson/1.6.9/topojson.min.js"></script>
-    <script src="libs/datamaps/datamaps.world.min.js"></script>
+    <script src="libs/datamaps/datamaps.all.min.js"></script>
 
 
     <!--Stylesheets-->
@@ -108,8 +108,7 @@
                         console.log("stop filter")*/
     
                         metaDataCities = _metaDataCities.map(function (d) {
-                            //TODO: parse ints and booleans
-
+            
                             return {
                                 name: d["city_name"],
                                 country: d["country_name"],

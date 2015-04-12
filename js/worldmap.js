@@ -17,6 +17,8 @@ WorldMap.prototype.initVis = function(){
   this.arc_color_scale =  d3.scale.log()
       .range(["red", "blue", "black"]);
 
+  this.zoomBehavior = d3.behavior.zoom();
+
   this.map =  new Datamap({
     element: document.getElementById("worldmap"),
     projection: "mercator",
@@ -25,10 +27,19 @@ WorldMap.prototype.initVis = function(){
       strokeWidth: 0.2,
       arcSharpness: 1.4,
       animationSpeed: 500
+    },
+    done: function(datamap) {
+       datamap.svg.call(that.zoomBehavior.on("zoom", redraw));
+
+         function redraw() {
+              datamap.svg.selectAll("g").attr("transform", "translate(" + d3.event.translate + ")scale(" + d3.event.scale + ")");
+         }
     }
   });
 
-  this.wrangleData(function(d) { return d.origin.country == "China" //|| d.destination.country == "China" 
+  this.addResetZoomButton(this.parentElement)
+
+  this.wrangleData(function(d) { return d.origin.country == "Germany" //|| d.destination.country == "China" 
                                         && d.origin.country != d.destination.country});
 
   this.updateVis();
@@ -67,7 +78,7 @@ WorldMap.prototype.updateVis = function(){
   this.displayData.forEach(function(d){
     d.options = {};
     d.options.strokeColor = that.arc_color_scale(d.number_of_routes);
-   // d.options.greatArc = true;
+    d.options.greatArc = true;
   })
 
   this.map.arc(this.displayData);
@@ -105,8 +116,24 @@ WorldMap.prototype.updateVis = function(){
 WorldMap.prototype.onSelectionChange= function (ranges){
 }
 
-// HELPERS
+WorldMap.prototype.addResetZoomButton = function(container){
+    var that = this;
 
+    var button = container.insert("button", ":first-child")
+      .attr("class", "btn btn-sm btn-primary")
+      .text("Reset Zoom")
+      .on("click", function() {
+        that.zoomBehavior.scale(1);
+        that.zoomBehavior.translate([0, 0]);
+
+        that.map.svg.selectAll("g")
+          .transition().duration(400)
+          .attr("transform", "translate(" + that.zoomBehavior.translate() + ")scale(" + that.zoomBehavior.scale() + ")");
+      })
+}
+
+
+// HELPERS
 
 
 
