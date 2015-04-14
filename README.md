@@ -1,3 +1,3 @@
 Flight Visualization
 ===
-*by Zeno Ziemke, Masahiro Kusunoki, Nhu Nguyen*
+##by Zeno Ziemke, Masahiro Kusunoki, Nhu Nguyen
