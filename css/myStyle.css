@@ -6,3 +6,17 @@ body{
 	position: relative;
 	width: 1000px; height: 700px;
 }
+
+.axis text {
+    font: 10px sans-serif;
+}
+
+.axis line {
+	stroke-width: 0.2;
+}
+.axis path {
+    fill: none;
+    stroke: #000;
+    stroke-width: 0.2;
+    shape-rendering: crispEdges;
+}
