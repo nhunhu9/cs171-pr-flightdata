@@ -23,7 +23,7 @@ LineChart = function(_parentElement, _data, _metaData, _eventHandler){
     "year": "2010"
 }];
 
-  this.margin = {top: 20, right: 0, bottom: 170, left: 60},
+  this.margin = {top: 20, right: 20, bottom: 170, left: 60},
   this.width =  650 - this.margin.left - this.margin.right,
   this.height = 440 - this.margin.top - this.margin.bottom;
 
@@ -41,8 +41,10 @@ LineChart.prototype.initVis = function(){
 
   this.xScale = d3.scale.linear().range([0, this.width]).domain([1990,2010]);
   this.yScale = d3.scale.linear().range([this.height, 0]).domain([110,215]);
+  
   this.xAxis = d3.svg.axis()
     .scale(this.xScale)
+    .ticks(5)
     .orient("bottom");
 
   this.yAxis = d3.svg.axis()
