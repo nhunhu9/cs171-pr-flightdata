@@ -22,11 +22,23 @@
     <link href='http://fonts.googleapis.com/css?family=PT+Sans:400,700' rel='stylesheet' type='text/css'>
 
     <script src = "js/worldmap.js"></script>
+    <script src = "js/table.js"></script>
 
     <!-- add own stylesheet-->
     <link rel="stylesheet" type="text/css" href="css/myStyle.css">
 
 </head>
+<style>
+   caption {
+     font-weight: bold;
+     text-align: center;
+     font-size: 200%
+   }
+
+   #filter_table {
+        text-align: center;
+   }
+</style>
 <body>
     <div class="container">
         <h1>Final Project</h1>
@@ -41,6 +53,19 @@
         <div class="row">
             <div id="worldmap" class="col-md-8"></div>
         </div>
+
+        <div class="row">
+            <div id="filter_table" class="col-md-8">Filter by: 
+            <label><input type="checkbox" id="filter" name="Americas" value="Americas" title="Americas">Americas</input></label>
+            <label><input type="checkbox" id="filter" name="Africa" value="Africa" title="Africa" >Africa</input></label>
+            <label><input type="checkbox" id="filter" name="Asia" value="Asia" title="Asia">Asia</input></label>
+            <label><input type="checkbox" id="filter" name="Europe" value="Europe" title="Europe" >Europe</input></label>
+            <label><input type="checkbox" id="filter" name="Oceania" value="Oceania" title="Oceania" >Oceania</input></label>
+            </div>
+        </div>
+        <div class="row">
+            <div id="table" class="col-md-8"></div>
+        </div>
     </div>
 
 
@@ -51,6 +76,7 @@
 
             var citiesToCities = [];
             var metaDataCities = {};
+            var completeData = [];
 
             var dateFormatter = d3.time.format("%Y-%m-%d");
 
@@ -59,7 +85,7 @@
 
                 var MyEventHandler = new Object();
 
-
+                var table = new Table(d3.select("table"), completeData, MyEventHandler);
                var worldmap = new WorldMap(d3.select("#worldmap"), citiesToCities, metaDataCities, MyEventHandler);
           
                  $(MyEventHandler).bind("selectionChanged", function(event, brush){
@@ -69,7 +95,7 @@
 
             }
 
-            var dataLoaded = function (error, _citiesToCities, _metaDataCities) {
+            var dataLoaded = function (error, _citiesToCities, _metaDataCities, _completeTable) {
 
                 if (!error) {
 
@@ -129,10 +155,38 @@
                                 number_outcoming_international_flights: parseInt(d["number_outcoming_international_flights"]),
                                 only_domestic_flights: (d["only_domestic_flights"] == 1 ? true : false)
                             } 
-                    });
+                        });
+
+                        var i = 0
+                        prev = ""
+                        _completeTable.forEach(function(d){
+                            if (completeData.length == 0 || prev != d["airline name"])
+                            {
+                                var res = {};
+                                res.count = 0
+                                res.airline = d["airline name"]
+                                res.country = d["airline country"]
+                                res.continent = d["airline continent"]
+                                prev = d["airline name"]
+                                _completeTable.forEach(function(e){
+                                    if (e["airline name"] == res.airline)
+                                    {
+                                        res.count++;
+                                    }
+                                })
+                                completeData[i] = res;
+                                i++;
+                            }
+                        })
+
+                        completeData.sort(function(a,b){
+                            return d3.descending(a.count, b.count)
+                        })
+                        console.log(completeData)
 
                     initVis();
-                } else {
+                }
+                else {
                     console.log(error);
                 }
             }
@@ -147,7 +201,8 @@
 
             	queue()
 				.defer(d3.csv, 'data/openflight_db/citiesToCities.csv') 
-				.defer(d3.csv, 'data/openflight_db/citiesTable.csv') 
+				.defer(d3.csv, 'data/openflight_db/citiesTable.csv')
+                .defer(d3.csv, 'data/openflight_db/completeTable.csv')  
 				.await(dataLoaded);
 
             }
