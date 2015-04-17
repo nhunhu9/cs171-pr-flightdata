@@ -6,6 +6,6 @@
 	<img src="img/screenshot.png" width="800"/>
 </p>
 
-Design Studio feedback is [here](https://github.com/nhunhu9/cs171-pr-flightdata/blob/master/designstudio.md).
+Process Book can be found [here](https://github.com/nhunhu9/cs171-pr-flightdata/tree/master/documentation).
 
-Documentation (proposal and process book) is [here](https://github.com/nhunhu9/cs171-pr-flightdata/tree/master/documentation).
+Design Studio feedback can be found [here](https://github.com/nhunhu9/cs171-pr-flightdata/blob/master/designstudio.md).
