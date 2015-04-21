@@ -566,14 +566,15 @@
     self.svg.selectAll("path")
       .classed("active", centered && function( d ) { return d === centered; });
 
-    self.svg.selectAll("g").transition()
-      .duration(750)
+    self.svg.selectAll("g")
+      .transition()
+      .duration(1000)
       .style("stroke-width", 1.5 / scale + "px")
       .attr("transform", "translate(" + translate + ")scale(" + scale + ")")
-       .call(endAll, function () {
+      .style("opacity", 0)
+      .call(self.endAll, function () {
         self.options.subunitClicked(d);
-      });
-
+      })
 
   }
   //stolen from underscore.js
@@ -587,24 +588,6 @@
     });
     return obj;
   }
-
-  //http://stackoverflow.com/questions/14024447/d3-js-transition-end-event
-  function endAll (transition, callback) {
-    var n;
-
-    if (transition.empty()) {
-        callback();
-    }
-    else {
-        n = transition.size();
-        transition.each("end", function () {
-            n--;
-            if (n === 0) {
-                callback();
-            }
-        });
-    }
-}
   /**************************************
              Public Functions
   ***************************************/
@@ -658,7 +641,23 @@
       .attr("transform", "");
   }
 
+  //http://stackoverflow.com/questions/14024447/d3-js-transition-end-event
+  Datamap.prototype.endAll = function(transition, callback) {
+    var n;
 
+    if (transition.empty()) {
+        callback();
+    }
+    else {
+        n = transition.size();
+        transition.each("end", function () {
+            n--;
+            if (n === 0) {
+                callback();
+            }
+        });
+    }
+  }
 
   // resize map
   Datamap.prototype.resize = function () {

@@ -52,11 +52,21 @@ WorldMap.prototype.initVis = function(){
       that.map.updateScope("usa");
       that.map.resetZoom(0); 
 
-   
-      that.wrangleData(function(d) { return d.origin.city == "Washington"  && d.destination.country == d.origin.country});
+
+    that.map.svg.selectAll("g")
+      .style("opacity", 0)
+      .transition()
+      .duration(750)
+      .delay(100)
+      .style("opacity", 1)
+      .call(that.map.endAll, function () {
+        that.wrangleData(function(d) { return d.origin.city == "Washington"  && d.destination.country == d.origin.country});
      // that.wrangleData(function(d) { return d.origin.country == g.properties.name  && d.origin.country == d.destination.country});
     //  that.wrangleData(function(d) { return d.origin.country == "United States"  && d.origin.country == d.destination.country});
       that.updateVis();    
+      });
+   
+     
 
     },
    subunitMouseover: function(g) {
