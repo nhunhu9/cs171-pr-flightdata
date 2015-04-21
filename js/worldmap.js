@@ -15,7 +15,10 @@ WorldMap.prototype.initVis = function(){
   var that = this; 
 
   this.arc_color_scale =  d3.scale.log()
-      .range(["red", "blue", "black"]);
+      .range(["red", "blue", "black"])
+      .domain(d3.extent(this.data, function(l) {
+        return l.number_of_routes;
+      }))
 
   this.zoomBehavior = d3.behavior.zoom();
 
@@ -25,7 +28,7 @@ WorldMap.prototype.initVis = function(){
     arcConfig: {
       strokeColor: "#00BFFF",
       strokeWidth: 0.2,
-      arcSharpness: 1.4,
+      arcSharpness: 0.5,
       animationSpeed: 500
     },
    zoomConfig: {
@@ -41,22 +44,35 @@ WorldMap.prototype.initVis = function(){
       }
     },
     subunitClick: function(g) {
-        console.log("clicked " + g.properties.name); 
+      that.wrangleData(null);
+      that.updateVis();               
+    }, 
+    subunitClicked: function(g) {
+      that.map.updateScope("usa");
+      that.map.resetZoom(0); 
 
-       // that.wrangleData(function(d) { return d.origin.country == g.properties.name  && d.origin.country == d.destination.country});
-       // that.updateVis();               
+   
+      //that.wrangleData(function(d) { return d.origin.city == "Washington"  && d.destination.country == d.origin.country});
+     // that.wrangleData(function(d) { return d.origin.country == g.properties.name  && d.origin.country == d.destination.country});
+      that.wrangleData(function(d) { return d.origin.country == "United States"  && d.origin.country == d.destination.country});
+      that.updateVis();    
+
     },
    subunitMouseover: function(g) {
-        console.log("hovered " + g.properties.name);  
+        if (that.map.options.scope != "world")
+            return;
 
         that.wrangleData(function(d) { return d.origin.country == g.properties.name 
                                         && d.origin.country != d.destination.country});
         that.updateVis();      
     },
     subunitMouseout: function() {
+      if (that.map.options.scope != "world")
+          return;
+
       //TODO: set a default filter 
-      that.wrangleData(null);
-      that.updateVis();
+    //  that.wrangleData(null);
+     // that.updateVis();
        
     } 
   });
@@ -118,11 +134,6 @@ WorldMap.prototype.filterAndAggregate = function(_filter){
 WorldMap.prototype.updateVis = function(){
   var that = this;
 
-  this.arc_color_scale.domain(d3.extent(this.displayData, function(l) {
-      return l.number_of_routes;
-     }))
-
-
   this.displayData.forEach(function(d){
     d.options = {};
     d.options.strokeColor = that.arc_color_scale(d.number_of_routes);
@@ -142,14 +153,7 @@ WorldMap.prototype.addResetZoomButton = function(container){
     var button = container.insert("button", ":first-child")
       .attr("class", "btn btn-sm btn-primary")
       .text("⇔ Reset Zoom")
-      .on("click", function() {
-        that.zoomBehavior.scale(1);
-        that.zoomBehavior.translate([0, 0]);
-
-        that.map.svg.selectAll("g")
-          .transition().duration(400)
-          .attr("transform", "translate(" + that.zoomBehavior.translate() + ")scale(" + that.zoomBehavior.scale() + ")");
-      })
+      .on("click", function() { that.map.resetZoom(); })
 }
 
 

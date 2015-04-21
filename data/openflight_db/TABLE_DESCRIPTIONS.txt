@@ -5,6 +5,7 @@ aprox. dimensions 3x4600
 countriesToCountries.csv
 
 
+bring attention to interesting countries (bar charts, story telling)
 countries to countries (current active routes)
 network (gml)
 ~230 nodes, 4600 edges

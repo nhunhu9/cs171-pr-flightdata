@@ -13,6 +13,7 @@
     dataType: 'json',
     done: function() {},
     subunitClick: function() {},
+    subunitClicked: function() {},
     subunitMouseover: function() {},
     subunitMouseout: function() {},
     fills: {
@@ -154,7 +155,9 @@
     var geo = subunits.selectAll('path.datamaps-subunit').data( geoData );
 
     geo.enter()
-      .append('path')
+      .append('path');
+
+    geo
       .attr('d', this.path)
       .attr('class', function(d) {
         return 'datamaps-subunit ' + d.id;
@@ -173,6 +176,9 @@
       })
       .style('stroke-width', geoConfig.borderWidth)
       .style('stroke', geoConfig.borderColor);
+
+    geo.exit()
+      .remove();
   }
 
   function handleGeographyConfig () {
@@ -237,7 +243,6 @@
       svg.selectAll('.datamaps-subunit')
         .on('click', function(d) { 
           clickZoom.call(self, d);
-          self.options.subunitClick(d);
         });
     }
 
@@ -332,6 +337,10 @@
         .attr('d', function(datum) {
             var originXY = self.latLngToXY(datum.origin.latitude, datum.origin.longitude);
             var destXY = self.latLngToXY(datum.destination.latitude, datum.destination.longitude);
+
+            if (originXY === null || destXY === null)
+              return "";
+            
             var midXY = [ (originXY[0] + destXY[0]) / 2, (originXY[1] + destXY[1]) / 2];
             if (options.greatArc) {
               return path(arc(datum))
@@ -526,7 +535,9 @@
         bounds;
     if (centered === d
     || isNaN(zoomFactor)
-    || zoomFactor <= 0) return resetZoom.call(self);
+    || zoomFactor <= 0) return this.resetZoom();
+
+      self.options.subunitClick(d);  
 
     self.svg.selectAll("path").classed("active", false);
     centered = d;
@@ -555,22 +566,13 @@
     self.svg.selectAll("g").transition()
       .duration(750)
       .style("stroke-width", 1.5 / scale + "px")
-      .attr("transform", "translate(" + translate + ")scale(" + scale + ")");
+      .attr("transform", "translate(" + translate + ")scale(" + scale + ")")
+       .call(endAll, function () {
+        self.options.subunitClicked(d);
+      });
+
+
   }
-
-  function resetZoom() {
-
-    this.svg.selectAll("path")
-      .classed("active", false);
-    centered = d3.select(null);
-
-    this.svg.selectAll("g").transition()
-      .duration(750)
-      .style("stroke-width", "1.5px")
-      .attr("transform", "");
-  }
-
-
   //stolen from underscore.js
   function defaults(obj) {
     Array.prototype.slice.call(arguments, 1).forEach(function(source) {
@@ -582,6 +584,24 @@
     });
     return obj;
   }
+
+  //http://stackoverflow.com/questions/14024447/d3-js-transition-end-event
+  function endAll (transition, callback) {
+    var n;
+
+    if (transition.empty()) {
+        callback();
+    }
+    else {
+        n = transition.size();
+        transition.each("end", function () {
+            n--;
+            if (n === 0) {
+                callback();
+            }
+        });
+    }
+}
   /**************************************
              Public Functions
   ***************************************/
@@ -603,6 +623,8 @@
       addContainer.call(this, this.options.element, this.options.height, this.options.width );
     }
 
+
+
     /* Add core plugins to this instance */
     this.addPlugin('bubbles', handleBubbles);
     this.addPlugin('legend', addLegend);
@@ -617,6 +639,23 @@
 
     return this.draw();
   }
+
+
+  Datamap.prototype.resetZoom = function(duration) {
+    if (duration === undefined)
+        duration = 750;
+
+    this.svg.selectAll("path")
+      .classed("active", false);
+    centered = d3.select(null);
+
+    this.svg.selectAll("g").transition()
+      .duration(duration)
+      .style("stroke-width", "1.5px")
+      .attr("transform", "");
+  }
+
+
 
   // resize map
   Datamap.prototype.resize = function () {
@@ -12290,6 +12329,10 @@
     }
   };
 
+  Datamap.prototype.updateScope = function(scope) {
+    this.options.scope = scope;
+    this.draw();
+}
   // expose library
   if ( typeof define === "function" && define.amd ) {
     define( "datamaps", function(require) { d3 = require('d3'); topojson = require('topojson'); return Datamap; } );
