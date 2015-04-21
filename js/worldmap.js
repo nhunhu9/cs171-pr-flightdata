@@ -57,13 +57,14 @@ WorldMap.prototype.initVis = function(){
       .style("opacity", 0)
       .transition()
       .duration(750)
-      .delay(100)
+      .delay(300)
       .style("opacity", 1)
       .call(that.map.endAll, function () {
         that.wrangleData(function(d) { return d.origin.city == "Washington"  && d.destination.country == d.origin.country});
      // that.wrangleData(function(d) { return d.origin.country == g.properties.name  && d.origin.country == d.destination.country});
     //  that.wrangleData(function(d) { return d.origin.country == "United States"  && d.origin.country == d.destination.country});
-      that.updateVis();    
+        that.updateVis();    
+        that.map.options.done(that.map);
       });
    
      
