@@ -54,7 +54,8 @@
     }, 
     zoomConfig: {
         zoomOnClick: true,
-        zoomFactor: 0.8
+        zoomFactor: 0.8,
+        onlyWorldMap: false
     },
     arcConfig: {
       strokeColor: '#DD1C77',
@@ -242,6 +243,8 @@
     if ( this.options.zoomConfig.zoomOnClick ) {
       svg.selectAll('.datamaps-subunit')
         .on('click', function(d) { 
+
+        if (!self.options.zoomConfig.onlyWorldMap || self.worldTopo.objects.world.geometries.filter(function(n) { return n.id == d.id; }).length > 0)
           clickZoom.call(self, d);
         });
     }

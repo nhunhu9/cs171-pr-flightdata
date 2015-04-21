@@ -33,7 +33,8 @@ WorldMap.prototype.initVis = function(){
     },
    zoomConfig: {
             zoomOnClick: true,
-            zoomFactor: 0.9
+            zoomFactor: 0.9,
+            onlyWorldMap: true
     },
     done: function(datamap) {
       // Pan & Zoom
@@ -52,9 +53,9 @@ WorldMap.prototype.initVis = function(){
       that.map.resetZoom(0); 
 
    
-      //that.wrangleData(function(d) { return d.origin.city == "Washington"  && d.destination.country == d.origin.country});
+      that.wrangleData(function(d) { return d.origin.city == "Washington"  && d.destination.country == d.origin.country});
      // that.wrangleData(function(d) { return d.origin.country == g.properties.name  && d.origin.country == d.destination.country});
-      that.wrangleData(function(d) { return d.origin.country == "United States"  && d.origin.country == d.destination.country});
+    //  that.wrangleData(function(d) { return d.origin.country == "United States"  && d.origin.country == d.destination.country});
       that.updateVis();    
 
     },
