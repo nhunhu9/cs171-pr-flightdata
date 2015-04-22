@@ -65,7 +65,7 @@ WorldMap.prototype.initVis = function(){
         .style("opacity", 1)
         .call(that.map.endAll, function () {
 
-          that.wrangleData(function(d) { return d.origin.country == g.properties.name  && d.origin.country == d.destination.country});
+          that.wrangleData(function(d) { return d.origin.country == g.properties.name  && d.origin.country == d.destination.country}, "city");
           that.updateVis();    
           that.map.options.done(that.map);
         });
@@ -77,7 +77,7 @@ WorldMap.prototype.initVis = function(){
             return;
 
         that.wrangleData(function(d) { return d.origin.country == g.properties.name 
-                                        && d.origin.country != d.destination.country});
+                                        && d.origin.country != d.destination.country}, "country");
         that.updateVis();      
     },
     subunitMouseout: function() {
@@ -117,7 +117,6 @@ WorldMap.prototype.initVis = function(){
 
   this.wrangleData(function(d) { return d.origin.country != d.destination.country; }, "country");
 
-debugger;
   this.updateVis();
 }
 
