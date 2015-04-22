@@ -54,22 +54,21 @@ WorldMap.prototype.initVis = function(){
       that.zoomBehavior.scale(1).translate([0, 0]);  
       that.map.resetZoom(0); 
 
+      d3.select("#addBackToWorldButton").attr("style", "");
 
-    that.map.svg.selectAll("g")
-      .style("opacity", 0)
-      .transition()
-      .duration(750)
-      .delay(300)
-      .style("opacity", 1)
-      .call(that.map.endAll, function () {
-    //  that.wrangleData(function(d) { return d.origin.city == "Washington"  && d.destination.country == d.origin.country});
-      that.wrangleData(function(d) { return d.origin.country == g.properties.name  && d.origin.country == d.destination.country});
-    //  that.wrangleData(function(d) { return d.origin.country == "United States"  && d.origin.country == d.destination.country});
-        that.updateVis();    
-        that.map.options.done(that.map);
-      });
-   
-     
+      that.map.svg.selectAll("g")
+        .style("opacity", 0)
+        .transition()
+        .duration(750)
+        .delay(300)
+        .style("opacity", 1)
+        .call(that.map.endAll, function () {
+
+          that.wrangleData(function(d) { return d.origin.country == g.properties.name  && d.origin.country == d.destination.country});
+          that.updateVis();    
+          that.map.options.done(that.map);
+        });
+  
 
     },
    subunitMouseover: function(g) {
@@ -85,9 +84,6 @@ WorldMap.prototype.initVis = function(){
           return;
 
       //TODO: set a default filter 
-    //  that.wrangleData(null);
-     // that.updateVis();
-       
     } 
   });
 
@@ -114,6 +110,7 @@ WorldMap.prototype.initVis = function(){
 */
 
   this.addResetZoomButton(this.parentElement);
+  this.addBackToWorldButton(this.parentElement);
 
   //this.addFocusCountryButton("usa", this.parentElement);
 
@@ -174,18 +171,47 @@ WorldMap.prototype.addResetZoomButton = function(container){
 }
 
 
-WorldMap.prototype.addFocusCountryButton = function(country, container){
+WorldMap.prototype.addBackToWorldButton = function(container){
     var that = this;
 
     var button = container.insert("button", ":first-child")
+      .attr("id", "addBackToWorldButton")
       .attr("class", "btn btn-sm btn-primary")
-      .text("Focus on " + country)
-      .on("click", function() {
-        that.map.scope = country;
-      
-      })
-}
+      .attr("style", "display: none")
+      .on("click", function() { 
+        var button = d3.select(this);
 
+        that.map.svg.selectAll("g")
+          .transition()
+          .duration(750)
+          .style("opacity", 0)
+          .call(that.map.endAll, function () {
+            button.attr("style", "display: none");
+
+            that.map.updateScope("world");
+            that.zoomBehavior.scale(1).translate([0, 0]);  
+            that.map.resetZoom();
+
+            that.wrangleData(null);
+            that.updateVis(); 
+
+
+            that.map.svg.selectAll("g")
+              .transition()
+              .duration(750)
+              .delay(750)
+              .style("opacity", 1)
+              .call(that.map.endAll, function () {
+                //TODO: set a default filter 
+                that.map.options.done(that.map);
+              });
+          });
+
+      })
+
+
+      button.text("↩ To World Map");
+}
 
 // HELPERS
 
