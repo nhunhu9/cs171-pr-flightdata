@@ -80,6 +80,7 @@
             var metaDataCities = {};
             var completeData = [];
             var airlineRouteCounts = [];
+            var domesticCitiyConnectionsCountByCountry = [];
 
             var dateFormatter = d3.time.format("%Y-%m-%d");
 
@@ -219,6 +220,13 @@
                         debugger;
                         */
 
+                    domesticCitiyConnectionsCountByCountry = d3.nest()
+                        .key(function(d) { return d.origin.country; })
+                        .rollup(function(leaves) { return leaves.length; })
+                        .entries(citiesToCities.filter(function(d) { return d.origin.country == d.destination.country}))
+                        .sort(function(a,b) { return b.values - a.values; });
+                   
+              
                     initVis();
                 }
                 else {

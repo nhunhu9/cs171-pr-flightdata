@@ -49,7 +49,7 @@ WorldMap.prototype.initVis = function(){
       that.updateVis();               
     }, 
     subunitClicked: function(g) {
-      that.map.updateScope("usa");
+      that.map.updateScope(g.id);
 
       that.zoomBehavior.scale(1).translate([0, 0]);  
       that.map.resetZoom(0); 
