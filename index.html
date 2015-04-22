@@ -98,7 +98,7 @@
 
             }
 
-            var dataLoaded = function (error, _citiesToCities, _metaDataCities, _completeTable) {
+            var dataLoaded = function (error, _citiesToCities, _metaDataCities, _completeTable, _airlineRouteCounts) {
 
                 if (!error) {
 
@@ -165,6 +165,11 @@
                             } 
                         });
 
+                        airlineRouteCounts = _airlineRouteCounts;
+
+                        //exported to airlineRouteCounts.json to optimize loading times, code below was used to generate .json
+                        /*
+
                         var i = 0
                         prev = ""
                         _completeTable.forEach(function(d){
@@ -192,7 +197,7 @@
                         })
 
                            d3.select("body").append("pre").text(JSON.stringify(airlineRouteCounts, null, 4));
-
+                        */
 
                         /*console.log("start filter")
                         _completeTable.forEach(function(a){
@@ -233,6 +238,7 @@
                 .defer(d3.json, 'data/openflight_db/citiesToCities_noduplicates.json')
                 .defer(d3.csv, 'data/openflight_db/citiesTable.csv')
                 .defer(d3.csv, 'data/openflight_db/completeTable.csv')  
+                .defer(d3.json, 'data/openflight_db/airlineRoutesCounts.json')  
 				.await(dataLoaded);
 
             }
