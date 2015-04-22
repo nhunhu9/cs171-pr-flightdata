@@ -9,7 +9,9 @@
     <script src="libs/d3/d3.svg.multibrush.js" charset="utf-8"></script>
     <script src="libs/jquery/jquery-2.1.1.min.js" charset="utf-8"></script>
     <script src="libs/bootstrap/js/bootstrap.min.js" charset="utf-8"></script>
-	<script src="http://d3js.org/queue.v1.min.js" charset="utf-8"></script>
+    <script src="http://d3js.org/queue.v1.min.js" charset="utf-8"></script>
+    <script src="https://cdn.datatables.net/1.10.6/js/jquery.dataTables.min.js" charset="utf-8"></script>
+	<script src="https://cdn.datatables.net/plug-ins/1.10.6/integration/bootstrap/3/dataTables.bootstrap.js" charset="utf-8"></script>
 
     <script src="//cdnjs.cloudflare.com/ajax/libs/topojson/1.6.9/topojson.min.js"></script>
     <script src="libs/datamaps/datamaps.all.js"></script>
@@ -77,6 +79,7 @@
             var citiesToCities = [];
             var metaDataCities = {};
             var completeData = [];
+            var airlineRouteCounts = [];
 
             var dateFormatter = d3.time.format("%Y-%m-%d");
 
@@ -85,9 +88,9 @@
 
                 var MyEventHandler = new Object();
 
-                var table = new Table(d3.select("table"), completeData, MyEventHandler);
-               var worldmap = new WorldMap(d3.select("#worldmap"), citiesToCities, metaDataCities, MyEventHandler);
-          
+                var table = new Table(d3.select("table"), airlineRouteCounts, MyEventHandler);
+                var worldmap = new WorldMap(d3.select("#worldmap"), citiesToCities, metaDataCities, MyEventHandler);
+          debugger;
                  $(MyEventHandler).bind("selectionChanged", function(event, brush){
                       worldmap.onSelectionChange(ranges);
         
@@ -99,7 +102,11 @@
 
                 if (!error) {
 
-                       citiesToCities = _citiesToCities.map(function (d) {
+                    citiesToCities = _citiesToCities;
+
+                    // exported to citiesToCities_noduplicates.json to optimize loading times, code below was used to generate .json
+                    /*
+                       citiesToCities_with_duplicates = _citiesToCities.map(function (d) {
                                 return {
                                     origin: { 
                                         city: d["departure_city"],
@@ -119,20 +126,21 @@
                                 };
                             }
                         )
-                    
-                     
-/*                      var citiesToCities = [];
+
                         console.log("start filter")
                         //TODO: make more efficient 
                         //remove duplicate items in dataset (i.e. MUC->BOS and BOS->MUC)
                         citiesToCities_with_duplicates.forEach(function(a){
-
-                            if (citiesToCities.filter(function(b) { return b.destination == a.origin && b.origin == a.destination}).length < 1)
+                            if (citiesToCities.filter(function(b) { return b.destination.city == a.origin.city && b.origin.city == a.destination.city}).length < 1)
                                 citiesToCities.push(a);
                         });
                         
-                        console.log("stop filter")*/
-    
+                        console.log("stop filter")
+
+                        d3.select("body").append("pre").text(JSON.stringify(citiesToCities, null, 4));
+
+                    */
+
                         metaDataCities = _metaDataCities.map(function (d) {
             
                             return {
@@ -160,7 +168,7 @@
                         var i = 0
                         prev = ""
                         _completeTable.forEach(function(d){
-                            if (completeData.length == 0 || prev != d["airline name"])
+                            if (airlineRouteCounts.length == 0 || prev != d["airline name"])
                             {
                                 var res = {};
                                 res.count = 0
@@ -174,15 +182,37 @@
                                         res.count++;
                                     }
                                 })
-                                completeData[i] = res;
+                                airlineRouteCounts[i] = res;
                                 i++;
                             }
                         })
 
-                        completeData.sort(function(a,b){
+                        airlineRouteCounts.sort(function(a,b){
                             return d3.descending(a.count, b.count)
                         })
-                        console.log(completeData)
+
+                           d3.select("body").append("pre").text(JSON.stringify(airlineRouteCounts, null, 4));
+
+
+                        /*console.log("start filter")
+                        _completeTable.forEach(function(a){
+
+                            if (airportToAirport.filter(function(b) {
+                                return b["arrival airport"] == a["departure airport"] && b["departure airport"] == a["departure airport"]
+                                || b["arrival airport"] == a["arrival airport"] && b["departure airport"] == a["departure airport"] 
+                            }).length < 1) {
+                                a["airline name"] = undefined; // better performance than delete, and also works if we export a JSON file afterwards
+                                a["airline country"] = undefined;
+                                a["airline continent"] = undefined;
+                                a["active airline"] = undefined;
+                                airportToAirport.push(a);
+                            }
+                             
+                        });
+                        
+                        console.log("stop filter");
+                        debugger;
+                        */
 
                     initVis();
                 }
@@ -200,8 +230,8 @@
             var startHere = function(){
 
             	queue()
-				.defer(d3.csv, 'data/openflight_db/citiesToCities.csv') 
-				.defer(d3.csv, 'data/openflight_db/citiesTable.csv')
+                .defer(d3.json, 'data/openflight_db/citiesToCities_noduplicates.json')
+                .defer(d3.csv, 'data/openflight_db/citiesTable.csv')
                 .defer(d3.csv, 'data/openflight_db/completeTable.csv')  
 				.await(dataLoaded);
 

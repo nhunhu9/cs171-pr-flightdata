@@ -60,8 +60,8 @@ WorldMap.prototype.initVis = function(){
       .delay(300)
       .style("opacity", 1)
       .call(that.map.endAll, function () {
-        that.wrangleData(function(d) { return d.origin.city == "Washington"  && d.destination.country == d.origin.country});
-     // that.wrangleData(function(d) { return d.origin.country == g.properties.name  && d.origin.country == d.destination.country});
+    //  that.wrangleData(function(d) { return d.origin.city == "Washington"  && d.destination.country == d.origin.country});
+      that.wrangleData(function(d) { return d.origin.country == g.properties.name  && d.origin.country == d.destination.country});
     //  that.wrangleData(function(d) { return d.origin.country == "United States"  && d.origin.country == d.destination.country});
         that.updateVis();    
         that.map.options.done(that.map);

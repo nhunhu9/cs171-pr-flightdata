@@ -16,13 +16,17 @@ Table.prototype.initVis = function(){
   var titles = ["Airline Name", "Airline Country", "Number of Routes"];
   var variable_names = ["airline", "country", "count"]
 
+
   function draw(data){
     var table = d3.select("body").append("table"),
         thead = table.append("thead")
                      .attr("class", "thead");
         tbody = table.append("tbody");
 
-        table.attr("align", "center");
+        table.attr("class", "table table-striped table-bordered");
+        table.attr("id", "airline_ranking")
+        table.attr("cellspacing", "0");
+        table.attr("width", "100%");
         table.append("caption")
           .html("Airline Ranking");
 
@@ -51,6 +55,8 @@ Table.prototype.initVis = function(){
     }
 
     draw(that.data)
+
+    $('#airline_ranking').dataTable();
 
 
     //FILTER FUNCTION: filter data that has continent = name
