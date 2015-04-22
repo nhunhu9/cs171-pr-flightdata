@@ -629,7 +629,7 @@
 
   Datamap.prototype.resetZoom = function(duration) {
     if (duration === undefined)
-        duration = 750;
+        duration = 500;
 
     this.svg.selectAll("path")
       .classed("active", false);

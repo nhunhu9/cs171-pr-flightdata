@@ -50,6 +50,8 @@ WorldMap.prototype.initVis = function(){
     }, 
     subunitClicked: function(g) {
       that.map.updateScope("usa");
+
+      that.zoomBehavior.scale(1).translate([0, 0]);  
       that.map.resetZoom(0); 
 
 
@@ -165,7 +167,10 @@ WorldMap.prototype.addResetZoomButton = function(container){
     var button = container.insert("button", ":first-child")
       .attr("class", "btn btn-sm btn-primary")
       .text("⇔ Reset Zoom")
-      .on("click", function() { that.map.resetZoom(); })
+      .on("click", function() { 
+        that.zoomBehavior.scale(1).translate([0, 0]);  
+        that.map.resetZoom();
+      })
 }
 
 
@@ -180,7 +185,6 @@ WorldMap.prototype.addFocusCountryButton = function(country, container){
       
       })
 }
-
 
 
 // HELPERS
