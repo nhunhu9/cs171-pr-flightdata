@@ -100,13 +100,14 @@
         .translate([width / 2, height / 2]);
     } else if ( options.scope === 'afg' ) {
        projection = d3.geo[options.projection]()
-        .center([66.166667, 34.4444])
+        .center([33, 66.166667])
         .scale(2746)
         .translate([width / 2, height / 2 - 89]);
     } else if ( options.scope === 'deu' ) {
         projection = d3.geo[options.projection]()
-        .scale(2264)
-        .translate([width / 2 - 289, height / 2 - 2377]);
+        .center([66.166667, 34.4444])
+        .scale(2430)
+        .translate([width / 2 - 289 + 2497 + 55, height / 2 - 2377 + 3540 - 238]);
     } else if ( options.scope === 'world' ) {
       projection = d3.geo[options.projection]()
         .scale((width + 1) / 2 / Math.PI)

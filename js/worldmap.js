@@ -27,7 +27,7 @@ WorldMap.prototype.initVis = function(){
     projection: "mercator",
     arcConfig: {
       strokeColor: "#00BFFF",
-      strokeWidth: 0.2,
+      strokeWidth: 0.3,
       arcSharpness: 0.5,
       animationSpeed: 500
     },
