@@ -81,6 +81,7 @@
             var completeData = [];
             var airlineRouteCounts = [];
             var domesticCitiyConnectionsCountByCountry = [];
+            var countriesToCountries = [];
 
             var dateFormatter = d3.time.format("%Y-%m-%d");
 
@@ -99,7 +100,7 @@
 
             }
 
-            var dataLoaded = function (error, _citiesToCities, _metaDataCities, _completeTable, _airlineRouteCounts) {
+            var dataLoaded = function (error, _citiesToCities, _metaDataCities, _completeTable, _airlineRouteCounts, _countriesToCountries) {
 
                 if (!error) {
 
@@ -225,8 +226,79 @@
                         .rollup(function(leaves) { return leaves.length; })
                         .entries(citiesToCities.filter(function(d) { return d.origin.country == d.destination.country}))
                         .sort(function(a,b) { return b.values - a.values; });
-                   
-              
+
+
+
+
+                        countriesToCountries = _countriesToCountries.map(function (d) {
+            
+                            return {
+                                origin: {
+                                    country: d["country departure"],
+                                    longitude: d["departure longitude"],
+                                    latitude: d["departure latitude"],
+                                },
+                                destination: {
+                                    country: d["country arrival"],
+                                    longitude: d["departure longitude"],
+                                    latitude: d["departure latitude"],
+                                },
+
+                                number_routes: parseInt(d["number of routes"])
+                            } 
+                        });
+
+                        debugger;
+
+                       /* var countries = countriesToCountries.map(function(d) { return d.origin.country}).concat(countriesToCountries.map(function(d) { return d.destination.country}));
+                        countries = countries.filter(function(v,i) { return countries.indexOf(v) == i; }).sort();
+
+                      
+
+                        var failed = [];
+
+                        var country = "";
+
+                        var finished = 0;
+
+                        for (var i = countries.length - 1; i >= 0; i--) {
+                            country = countries[i];
+
+                           // var e = new Date().getTime() + (0.5 * 1000);
+                            //while (new Date().getTime() <= e) {}
+
+                             d3.json("http://maps.googleapis.com/maps/api/geocode/json?language=en&address=" + country, function(error, json) {
+                                var google_country_name = google_country_name;
+                            
+                                finished++;
+                                if (finished == countries.length)
+                                    debugger;
+
+                                if (json.status != "OK")
+                                    {
+                                        console.log(google_country_name);
+                                        return;
+                                    }
+                                countriesToCountries
+                                    .filter(function(n) { return n.origin.country == google_country_name; })
+                                    .forEach(function(n) { 
+                                        n.origin.longitude = json.results[0].geometry.location.lng;
+                                        n.origin.latitude = json.results[0].geometry.location.lat;
+                                    })
+
+                                countriesToCountries
+                                    .filter(function(n) { return n.destination.country == google_country_name; })
+                                    .forEach(function(n) { 
+                                        n.destination.longitude = json.results[0].geometry.location.lng;
+                                        n.destination.latitude = json.results[0].geometry.location.lat;
+                                    })
+
+                                console.log(google_country_name + ": " + countriesToCountries
+                                    .filter(function(n) { return n.origin.country == google_country_name; }).length + " " + countriesToCountries
+                                    .filter(function(n) { return n.destination.country == google_country_name; }))
+                            });
+                        }*/
+                       
                     initVis();
                 }
                 else {
@@ -247,6 +319,7 @@
                 .defer(d3.csv, 'data/openflight_db/citiesTable.csv')
                 .defer(d3.csv, 'data/openflight_db/completeTable.csv')  
                 .defer(d3.json, 'data/openflight_db/airlineRoutesCounts.json')  
+                .defer(d3.csv, 'data/openflight_db/countriesToCountries.csv')  
 				.await(dataLoaded);
 
             }
