@@ -1,8 +1,9 @@
-WorldMap = function(_parentElement, _data, _metaData, _eventHandler){
+WorldMap = function(_parentElement, _data, _metaData, _countriesToCountries, _eventHandler){
   
   this.parentElement = _parentElement;
   this.data = _data;
   this.metaData = _metaData;
+  this.countriesToCountries = _countriesToCountries;
   this.eventHandler = _eventHandler;
   this.displayData = [];
 
@@ -114,25 +115,32 @@ WorldMap.prototype.initVis = function(){
 
   //this.addFocusCountryButton("usa", this.parentElement);
 
-  this.wrangleData(function(d) { return d.origin.city == "New York" //|| d.destination.country == "China" 
-                                        && d.origin.country != d.destination.country});
+  this.wrangleData(function(d) { return d.origin.country != d.destination.country; }, "country");
 
+debugger;
   this.updateVis();
 }
 
-
-WorldMap.prototype.wrangleData= function(_filterFunction){
-  this.displayData = this.filterAndAggregate(_filterFunction);
+// level: default: city, alternative: country
+WorldMap.prototype.wrangleData= function(_filterFunction, level){
+  this.displayData = this.filterAndAggregate(_filterFunction, level);
 }
 
-WorldMap.prototype.filterAndAggregate = function(_filter){
+WorldMap.prototype.filterAndAggregate = function(_filter, level){
 
     var filter = _filter || function(){return false;}
+
+    var data_level = [];
+
+    if (level ==  "country")
+        data_level = this.countriesToCountries;
+    else
+        data_level = this.data; //default is city to city data
 
 
     var that = this;
 
-    var res =  this.data.filter(function(d) {
+    var res =  data_level.filter(function(d) {
       return filter(d);
     });
 

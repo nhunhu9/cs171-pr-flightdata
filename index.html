@@ -91,7 +91,7 @@
                 var MyEventHandler = new Object();
 
                 var table = new Table(d3.select("table"), airlineRouteCounts, MyEventHandler);
-                var worldmap = new WorldMap(d3.select("#worldmap"), citiesToCities, metaDataCities, MyEventHandler);
+                var worldmap = new WorldMap(d3.select("#worldmap"), citiesToCities, metaDataCities, countriesToCountries, MyEventHandler);
         
                 $(MyEventHandler).bind("selectionChanged", function(event, brush){
                       worldmap.onSelectionChange(ranges);
@@ -235,20 +235,19 @@
                             return {
                                 origin: {
                                     country: d["country departure"],
-                                    longitude: d["departure longitude"],
-                                    latitude: d["departure latitude"],
+                                    longitude: parseFloat(d["departure longitude"]),
+                                    latitude: parseFloat(d["departure latitude"]),
                                 },
                                 destination: {
                                     country: d["country arrival"],
-                                    longitude: d["departure longitude"],
-                                    latitude: d["departure latitude"],
+                                    longitude: parseFloat(d["arrival longitude"]),
+                                    latitude: parseFloat(d["arrival latitude"]),
                                 },
 
-                                number_routes: parseInt(d["number of routes"])
+                                number_of_routes: parseInt(d["number of routes"])
                             } 
                         });
 
-                        debugger;
 
                        /* var countries = countriesToCountries.map(function(d) { return d.origin.country}).concat(countriesToCountries.map(function(d) { return d.destination.country}));
                         countries = countries.filter(function(v,i) { return countries.indexOf(v) == i; }).sort();
