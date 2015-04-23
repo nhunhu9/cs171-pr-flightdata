@@ -144,11 +144,11 @@ LineChart.prototype.updateVis = function(){
 
   console.log(that.displayData);
 
-  // this.svg.append("path")
-  //     .attr('d', that.line(that.displayData[0]))
-  //     .attr('stroke', 'green')
-  //     .attr('stroke-width', 2)
-  //     .attr('fill', 'none');;
+  this.svg.append("path")
+      .attr('d', that.line(that.displayData[0]))
+      .attr('stroke', 'green')
+      .attr('stroke-width', 2)
+      .attr('fill', 'none');;
 
    this.svg.append("path")
       .attr('d', that.line(that.displayData[1]))
