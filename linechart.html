@@ -74,7 +74,7 @@
 
             }
 
-            var dataLoaded = function (error, _citiesToCities, _metaDataCities, _citiesToCitiesPass) {
+            var dataLoaded = function (error, _citiesToCities, _metaDataCities, _citiesToCitiesPassFormatted) {
 
                 if (!error) {
 
@@ -135,16 +135,17 @@
                             only_domestic_flights: (d["only_domestic_flights"] == 1 ? true : false)
                         } 
                     });
-					
-					citiesToCitiesPass = _citiesToCitiesPass.map(function (d){
+					citiesToCitiesPass = _citiesToCitiesPassFormatted.map(function (d){
 						return {
-							departure_city: d["city departure"],
-							arrival_city: d["city arrival"],
-							no_1990: d["number passengers 1990"],
-							no_1995: d["number passengers 1995"],
-							no_2000: d["number passengers 2000"],
-							no_2005: d["number passengers 2005"],
-							no_2010: d["number passengers 2010"]
+							departure_city: d["depCity"],
+							departure_country : d["depCountry"],
+                            arrival_city: d["arrCity"],
+                            arrival_country: d["arrCountry"],
+							no_1990: d["pass_1990"],
+							no_1995: d["pass_1995"],
+							no_2000: d["pass_2000"],
+							no_2005: d["pass_2005"],
+							no_2010: d["pass_2010"]
 						}
 					})
 
@@ -165,7 +166,7 @@
             	queue()
 				.defer(d3.csv, 'data/openflight_db/citiesToCities.csv') 
 				.defer(d3.csv, 'data/openflight_db/citiesTable.csv')
-				.defer(d3.csv, 'data/openflight_db/citiesToCitiesPass.csv') 
+				.defer(d3.csv, 'data/openflight_db/citiesToCitiesPassFormatted.csv') 
 				.await(dataLoaded);
 
             }
