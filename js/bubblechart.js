@@ -46,8 +46,9 @@ BubbleChart.prototype.initVis = function(){
 
    this.titleElement = this.svg.insert("text", ":first-child")
       .attr("id", "bubbleTitle")
+      .attr("transform", "translate(20,20)")
 
-  this.wrangleData(function(d) { return d.origin.country != d.destination.country; }, function(a,b) {return b.number_of_passengers[2010]-a.number_of_passengers[2010]; },function(d) { return d.number_of_routes; }, "Top Flight Destinations");
+  this.wrangleData(function(d) { return d.origin.country != d.destination.country; }, function(a,b) {return b.number_of_passengers[2010]-a.number_of_passengers[2010]; },function(d) { return d.number_of_routes; }, "Top Flight Destinations:");
 
   this.updateVis();
 
@@ -167,7 +168,11 @@ BubbleChart.prototype.updateVis = function(){
 }
 
 
-BubbleChart.prototype.onSelectionChange= function (ranges){
+BubbleChart.prototype.onSelectionChange= function (){
+
+    this.wrangleData(function(d) { return d.origin.country != d.destination.country; }, function(a,b) {return b.number_of_passengers[2010]-a.number_of_passengers[2010]; },function(d) { return d.number_of_routes; }, "Top Flight Destinations:");
+
+  this.updateVis();
 }
 
 
