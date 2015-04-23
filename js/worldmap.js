@@ -117,7 +117,9 @@ WorldMap.prototype.initVis = function(){
 
   //this.addFocusCountryButton("usa", this.parentElement);
 
-  this.wrangleData(function(d) { return d.origin.country != d.destination.country; }, "country");
+ // this.wrangleData(function(d) { return d.origin.country != d.destination.country; }, "country");
+
+ this.wrangleData(null );
 
   this.updateVis();
 }

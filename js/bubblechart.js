@@ -43,7 +43,11 @@ BubbleChart.prototype.initVis = function(){
       .append("g")
       .attr("transform", "translate(" + margin.left + "," + margin.top + ")");
 
-  this.wrangleData(function(d) { return d.origin.country != d.destination.country; }, "country");
+
+   this.titleElement = this.svg.insert("text", ":first-child")
+      .attr("id", "bubbleTitle")
+
+  this.wrangleData(function(d) { return d.origin.country != d.destination.country; }, function(a,b) {return b.number_of_passengers[2010]-a.number_of_passengers[2010]; },function(d) { return d.number_of_routes; }, "Top Flight Destinations");
 
   this.updateVis();
 
@@ -100,45 +104,31 @@ function gravity(alpha) {
 }
 
 // level: default: city, alternative: country
-BubbleChart.prototype.wrangleData= function(_filterFunction, level){
+BubbleChart.prototype.wrangleData= function(_filterFunction, _sort, _label, _title){
 
   that = this;
 
-  this.displayData = this.filterAndAggregate(_filterFunction, level).map(function (d) {
+  this.title = _title;
+
+  this.displayData = this.filterAndAggregate(_filterFunction, _sort).map(function (d) {
       var i = Math.floor(Math.random() * 1) //color
       return {
-          radius: that.radius(d.number_of_routes),
+          radius: that.radius(d.number_of_routes),//radius: that.radius(d.number_of_passengers[2010]),
           color: that.color(i),
           cx: that.x(i),
           cy: that.height / 2,
-          label: d.number_of_routes
+          label: _label(d)
       };
 
   });
 
 }
 
-BubbleChart.prototype.filterAndAggregate = function(_filter, level){
-    
+BubbleChart.prototype.filterAndAggregate = function(_filter, _sort){
     return [{"origin":{"country":"China","longitude":105,"latitude":35},"destination":{"country":"Taiwan","longitude":121,"latitude":23.5},"number_of_routes":165},{"origin":{"country":"China","longitude":105,"latitude":35},"destination":{"country":"Japan","longitude":138,"latitude":36},"number_of_routes":146},{"origin":{"country":"China","longitude":105,"latitude":35},"destination":{"country":"South Korea","longitude":127.5,"latitude":37},"number_of_routes":120},{"origin":{"country":"China","longitude":105,"latitude":35},"destination":{"country":"Hong Kong","longitude":114.17,"latitude":22.25},"number_of_routes":107},{"origin":{"country":"China","longitude":105,"latitude":35},"destination":{"country":"United States","longitude":-97,"latitude":38},"number_of_routes":49},{"origin":{"country":"China","longitude":105,"latitude":35},"destination":{"country":"Thailand","longitude":100,"latitude":15},"number_of_routes":42},{"origin":{"country":"China","longitude":105,"latitude":35},"destination":{"country":"Macau","longitude":113.55,"latitude":22.17},"number_of_routes":37},{"origin":{"country":"China","longitude":105,"latitude":35},"destination":{"country":"Singapore","longitude":103.8,"latitude":1.37},"number_of_routes":37},{"origin":{"country":"China","longitude":105,"latitude":35},"destination":{"country":"Russia","longitude":100,"latitude":60},"number_of_routes":34},{"origin":{"country":"China","longitude":105,"latitude":35},"destination":{"country":"Malaysia","longitude":112.5,"latitude":2.5},"number_of_routes":22},{"origin":{"country":"China","longitude":105,"latitude":35},"destination":{"country":"Philippines","longitude":122,"latitude":13},"number_of_routes":19},{"origin":{"country":"China","longitude":105,"latitude":35},"destination":{"country":"Germany","longitude":9,"latitude":51},"number_of_routes":17},{"origin":{"country":"China","longitude":105,"latitude":35},"destination":{"country":"Australia","longitude":133,"latitude":-27},"number_of_routes":16},{"origin":{"country":"China","longitude":105,"latitude":35},"destination":{"country":"Vietnam","longitude":107.83,"latitude":16.17},"number_of_routes":15},{"origin":{"country":"China","longitude":105,"latitude":35},"destination":{"country":"Netherlands","longitude":5.75,"latitude":52.5},"number_of_routes":13},{"origin":{"country":"China","longitude":105,"latitude":35},"destination":{"country":"United Arab Emirates","longitude":54,"latitude":24},"number_of_routes":13},{"origin":{"country":"China","longitude":105,"latitude":35},"destination":{"country":"Canada","longitude":-95,"latitude":60},"number_of_routes":12},{"origin":{"country":"China","longitude":105,"latitude":35},"destination":{"country":"India","longitude":77,"latitude":20},"number_of_routes":8},{"origin":{"country":"China","longitude":105,"latitude":35},"destination":{"country":"Burma","longitude":98,"latitude":22},"number_of_routes":7},{"origin":{"country":"China","longitude":105,"latitude":35},"destination":{"country":"United Kingdom","longitude":-2,"latitude":54},"number_of_routes":7}].slice(0,10)
-
-    var filter = _filter || function(){return false;}
-
-    var data_level = [];
-
-    if (level ==  "country")
-        data_level = this.countriesToCountries;
-    else
-        data_level = this.data; //default is city to city data
-
-
-    var that = this;
-
-    var res =  data_level.filter(function(d) {
-      return filter(d);
-    });
-
-    return res;
+  return this.data.filter(function(d) {
+    return _filter(d);
+  }).sort(_sort).slice(0,10)
 
 }
 
@@ -171,6 +161,8 @@ BubbleChart.prototype.updateVis = function(){
       .style("fill", "#FFFFFF")
 
   this.circle.exit().remove();
+
+  this.titleElement.text(this.title);
  
 }
 
