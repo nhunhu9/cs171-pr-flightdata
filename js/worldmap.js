@@ -68,6 +68,8 @@ WorldMap.prototype.initVis = function(){
           that.wrangleData(function(d) { return d.origin.country == g.properties.name  && d.origin.country == d.destination.country}, "city");
           that.updateVis();    
           that.map.options.done(that.map);
+
+          $(that.eventHandler).trigger("selectionChanged", {level: "country", subitemClicked: g});
         });
   
 
@@ -211,6 +213,8 @@ WorldMap.prototype.addBackToWorldButton = function(container){
               .call(that.map.endAll, function () {
                 //TODO: set a default filter 
                 that.map.options.done(that.map);
+
+                $(that.eventHandler).trigger("selectionChanged", {level: "world" });
               });
           });
 

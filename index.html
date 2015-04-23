@@ -25,6 +25,7 @@
 
     <script src = "js/worldmap.js"></script>
     <script src = "js/table.js"></script>
+    <script src = "js/bubblechart.js"></script>
 
     <!-- add own stylesheet-->
     <link rel="stylesheet" type="text/css" href="css/myStyle.css">
@@ -52,8 +53,9 @@
 
         </div>
 
-        <div class="row">
+        <div class="row" style="width:1500px;">
             <div id="worldmap" class="col-md-8"></div>
+            <div id="bubblechart1" class="col-md-2"></div>
         </div>
 
         <div class="row">
@@ -89,18 +91,23 @@
             var initVis = function(){
 
                 var MyEventHandler = new Object();
-
+                
+                var bubblechart1 = new BubbleChart(d3.select("#bubblechart1"), citiesToCitiesPass, MyEventHandler);
                 var table = new Table(d3.select("table"), airlineRouteCounts, MyEventHandler);
                 var worldmap = new WorldMap(d3.select("#worldmap"), citiesToCities, metaDataCities, countriesToCountries, MyEventHandler);
-        
-                $(MyEventHandler).bind("selectionChanged", function(event, brush){
-                      worldmap.onSelectionChange(ranges);
+                
+                $(MyEventHandler).bind("selectionChanged", function(event, args){
+
+                    console.log(args.level);
+                    console.log(args.
+                        subitemClicked);
+                    //  worldmap.onSelectionChange(ranges);
         
                   });
 
             }
 
-            var dataLoaded = function (error, _citiesToCities, _metaDataCities, _completeTable, _airlineRouteCounts, _countriesToCountries) {
+            var dataLoaded = function (error, _citiesToCities, _metaDataCities, _completeTable, _airlineRouteCounts, _countriesToCountries, _citiesToCitiesPass) {
 
                 if (!error) {
 
@@ -298,6 +305,30 @@
                             });
                         }*/
                        
+
+                        citiesToCitiesPass = _citiesToCitiesPass.map(function (d) {
+            
+                     
+                            return {
+                                origin: {
+                                    city: d["city departure"],
+                                    country: d["country departure"],
+                                    state: d["state departure"]
+                                },
+                                destination: {
+                                    city: d["city arrival"],
+                                    country: d["country arrival"],
+                                    state: d["state arrival"]
+                                },
+
+                                number_of_passengers: {
+                                    2000: parseInt(d["number passengers 2000"]),
+                                    2005: parseInt(d["number passengers 2005"]),
+                                    2010: parseInt(d["number passengers 2010"])
+                                }
+                            } 
+                        });
+
                     initVis();
                 }
                 else {
@@ -319,6 +350,7 @@
                 .defer(d3.csv, 'data/openflight_db/completeTable.csv')  
                 .defer(d3.json, 'data/openflight_db/airlineRoutesCounts.json')  
                 .defer(d3.csv, 'data/openflight_db/countriesToCountries.csv')  
+                .defer(d3.csv, 'data/openflight_db/citiesToCitiesPass_zz.csv')  
 				.await(dataLoaded);
 
             }
