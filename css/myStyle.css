@@ -20,3 +20,10 @@ body{
     stroke-width: 0.2;
     shape-rendering: crispEdges;
 }
+
+tr::before{
+	display: none !important;
+}
+tr::after{
+	display: none !important;
+}

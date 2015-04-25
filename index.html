@@ -25,6 +25,7 @@
 
     <script src = "js/worldmap.js"></script>
     <script src = "js/table.js"></script>
+    <script src = "js/linechart.js"></script>
 
     <!-- add own stylesheet-->
     <link rel="stylesheet" type="text/css" href="css/myStyle.css">
@@ -54,6 +55,9 @@
 
         <div class="row">
             <div id="worldmap" class="col-md-8"></div>
+            <div id="linechart" class="col-md-8">
+                <svg width="650" height="330"></svg>
+            </div>
         </div>
 
         <div class="row">
@@ -92,6 +96,7 @@
 
                 var table = new Table(d3.select("table"), airlineRouteCounts, MyEventHandler);
                 var worldmap = new WorldMap(d3.select("#worldmap"), citiesToCities, metaDataCities, countriesToCountries, MyEventHandler);
+                var linechart = new LineChart(d3.select("#linechart"), citiesToCitiesPass, metaDataCities, MyEventHandler);
         
                 $(MyEventHandler).bind("selectionChanged", function(event, brush){
                       worldmap.onSelectionChange(ranges);
@@ -100,7 +105,7 @@
 
             }
 
-            var dataLoaded = function (error, _citiesToCities, _metaDataCities, _completeTable, _airlineRouteCounts, _countriesToCountries) {
+            var dataLoaded = function (error, _citiesToCities, _metaDataCities, _completeTable, _airlineRouteCounts, _countriesToCountries, _citiesToCitiesPass) {
 
                 if (!error) {
 
@@ -297,6 +302,19 @@
                                     .filter(function(n) { return n.destination.country == google_country_name; }))
                             });
                         }*/
+                    citiesToCitiesPass = _citiesToCitiesPass.map(function (d){
+                        return {
+                            departure_city: d["depCity"],
+                            departure_country : d["depCountry"],
+                            arrival_city: d["arrCity"],
+                            arrival_country: d["arrCountry"],
+                            no_1990: d["pass_1990"],
+                            no_1995: d["pass_1995"],
+                            no_2000: d["pass_2000"],
+                            no_2005: d["pass_2005"],
+                            no_2010: d["pass_2010"]
+                        }
+                    })
                        
                     initVis();
                 }
@@ -318,7 +336,8 @@
                 .defer(d3.csv, 'data/openflight_db/citiesTable.csv')
                 .defer(d3.csv, 'data/openflight_db/completeTable.csv')  
                 .defer(d3.json, 'data/openflight_db/airlineRoutesCounts.json')  
-                .defer(d3.csv, 'data/openflight_db/countriesToCountries.csv')  
+                .defer(d3.csv, 'data/openflight_db/countriesToCountries.csv')
+                .defer(d3.csv, 'data/openflight_db/citiesToCitiesPassFormatted.csv') 
 				.await(dataLoaded);
 
             }

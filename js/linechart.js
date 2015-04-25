@@ -5,29 +5,13 @@ LineChart = function(_parentElement, _data, _metaData, _eventHandler){
   this.metaData = _metaData;
   this.eventHandler = _eventHandler;
   this.displayData = [];
+  this.color = d3.scale.category10()
 
-  this.sampledata = [{
-    "no_pass": "202",
-    "year": "1990"
-}, {
-    "no_pass": "215",
-    "year": "1995"
-}, {
-    "no_pass": "179",
-    "year": "2000"
-}, {
-    "no_pass": "199",
-    "year": "2005"
-}, {
-    "no_pass": "134",
-    "year": "2010"
-}];
 
   this.margin = {top: 20, right: 20, bottom: 170, left: 60},
   this.width =  650 - this.margin.left - this.margin.right,
   this.height = 440 - this.margin.top - this.margin.bottom;
 
-  console.log(this.data)
   this.initVis();
 }
 
@@ -60,8 +44,8 @@ LineChart.prototype.initVis = function(){
         .attr("class", "y axis")
 
   this.line = d3.svg.line()
-    .x(function(d, i) { return that.xScale(d.year); })
-    .y(function(d) { return that.yScale(d.pass); })
+    .x(function(d) { return that.xScale(d["year"]); })
+    .y(function(d) { return that.yScale(d["pass"]); })
     .interpolate("monotone");;
 
 
@@ -72,17 +56,16 @@ LineChart.prototype.initVis = function(){
 
 
 LineChart.prototype.wrangleData= function(_filterFunction){
-  this.displayData = this.filterAndAggregate("United Kingdom");
+  this.displayData = this.filterAndAggregate("Japan");
 }
 
 LineChart.prototype.filterAndAggregate = function(_filter){
 
     var filter = _filter || function(){return false;}
 
-    console.log(filter);
     var that = this;
 
-    var res =  this.data.filter(function(d) {
+    var filteredData =  this.data.filter(function(d) {
       return d["departure_country"] == filter;
     });
     
@@ -95,45 +78,45 @@ LineChart.prototype.filterAndAggregate = function(_filter){
         "no_2005": d3.sum(leaves, function(d){return d.no_2005}),
         "no_2010": d3.sum(leaves, function(d){return d.no_2010}),
       }})
-      .entries(res);
+      .entries(filteredData);
     nested_data.sort(function(a, b) {
               return d3.descending(a["values"]["no_1990"], b["values"]["no_1990"]);});
 
-    var tmp = [];
-    nested_data.map(function(d){
-      var age = [
-        {
-          "year": "1990",
-          "pass": d["values"]["no_1990"],
-        },
-        {
-          "year": "1995",
-          "pass": d["values"]["no_1995"],
-        },
-        {
-          "year": "2000",
-          "pass": d["values"]["no_2000"],
-        },
-        {
-          "year": "2005",
-          "pass": d["values"]["no_2005"],
-        },
-        {
-          "year": "2010",
-          "pass": d["values"]["no_2010"],
-        },];
-      
-      tmp.push(age);
+    var displayData = [];
+    var city_data = [];
+    nested_data.map(function(d, i){
+      if(i < 5) {
+        var age = [
+          {
+            "year": "1990",
+            "pass": d["values"]["no_1990"],
+          },{
+            "year": "1995",
+            "pass": d["values"]["no_1995"],
+          },{
+            "year": "2000",
+            "pass": d["values"]["no_2000"],
+          },{
+            "year": "2005",
+            "pass": d["values"]["no_2005"],
+          },{
+            "year": "2010",
+            "pass": d["values"]["no_2010"],
+          },
+          ];
+        city_data = [{"city": d["key"], "data": age}];
+        displayData = displayData.concat(city_data);
+      }
     })
-    return tmp;
+    return displayData;
 }
 
 LineChart.prototype.updateVis = function(){
   var that = this;
 
   // this.yScale.domain(d3.extent(that.displayData[0], function(d){return d.pass}))
-  var max = d3.max(that.displayData[1], function(d){return d.pass})
-  var min = d3.min(that.displayData[4], function(d){return d.pass})
+  var max = d3.max(that.displayData[0]["data"], function(d){return d.pass})
+  var min = d3.min(that.displayData[4]["data"], function(d){return d.pass})
   this.yScale.domain([min, max])
 
   this.svg.select(".x.axis")
@@ -142,37 +125,14 @@ LineChart.prototype.updateVis = function(){
   this.svg.select(".y.axis")
         .call(this.yAxis)
 
-  console.log(that.displayData);
-
-  this.svg.append("path")
-      .attr('d', that.line(that.displayData[0]))
-      .attr('stroke', 'green')
-      .attr('stroke-width', 2)
-      .attr('fill', 'none');;
-
-   this.svg.append("path")
-      .attr('d', that.line(that.displayData[1]))
-      .attr('stroke', 'blue')
-      .attr('stroke-width', 2)
-      .attr('fill', 'none');;
-
-   this.svg.append("path")
-      .attr('d', that.line(that.displayData[2]))
-      .attr('stroke', 'red')
-      .attr('stroke-width', 2)
-      .attr('fill', 'none');;
-
-   this.svg.append("path")
-      .attr('d', that.line(that.displayData[3]))
-      .attr('stroke', 'yellow')
-      .attr('stroke-width', 2)
-      .attr('fill', 'none');;
-
-   this.svg.append("path")
-      .attr('d', that.line(that.displayData[4]))
-      .attr('stroke', 'green')
-      .attr('stroke-width', 2)
-      .attr('fill', 'none');;
+  for (i = 0; i < 5; i++){
+    this.svg.append("path")
+    .attr('d', that.line(that.displayData[i]["data"]))
+    .attr('stroke', that.color(i))
+    .attr('stroke-width', 2)
+    .attr('fill', 'none')
+    .text(that.displayData[i]["city"]);;
+  }
 
 }
 
