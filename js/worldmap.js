@@ -68,6 +68,8 @@ WorldMap.prototype.initVis = function(){
           that.wrangleData(function(d) { return d.origin.country == g.properties.name  && d.origin.country == d.destination.country}, "city");
           that.updateVis();    
           that.map.options.done(that.map);
+
+          $(that.eventHandler).trigger("selectionChanged", {level: "country", subitemClicked: g});
         });
   
 
@@ -115,7 +117,9 @@ WorldMap.prototype.initVis = function(){
 
   //this.addFocusCountryButton("usa", this.parentElement);
 
-  this.wrangleData(function(d) { return d.origin.country != d.destination.country; }, "country");
+ // this.wrangleData(function(d) { return d.origin.country != d.destination.country; }, "country");
+
+ this.wrangleData(null );
 
   this.updateVis();
 }
@@ -211,6 +215,8 @@ WorldMap.prototype.addBackToWorldButton = function(container){
               .call(that.map.endAll, function () {
                 //TODO: set a default filter 
                 that.map.options.done(that.map);
+
+                $(that.eventHandler).trigger("selectionChanged", {level: "world" });
               });
           });
 
