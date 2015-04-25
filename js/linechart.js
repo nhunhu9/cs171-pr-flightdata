@@ -114,7 +114,7 @@ LineChart.prototype.filterAndAggregate = function(_filter){
 LineChart.prototype.updateVis = function(){
   var that = this;
 
-  // this.yScale.domain(d3.extent(that.displayData[0], function(d){return d.pass}))
+console.log(that.displayData)
   var max = d3.max(that.displayData[0]["data"], function(d){return d.pass})
   var min = d3.min(that.displayData[4]["data"], function(d){return d.pass})
   this.yScale.domain([min, max])
