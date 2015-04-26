@@ -60,6 +60,7 @@
                 <svg width="650" height="330"></svg>
             </div>
             <div id="barchart1" class="col-md-2"></div>
+            <div id="barchart2" class="col-md-2"></div>
         </div>
 
         <div class="row">
@@ -96,7 +97,9 @@
 
                 var MyEventHandler = new Object();
                 
-                var barchart1 = new BarChart(d3.select("#barchart1"), citiesToCitiesPass, MyEventHandler);
+                var barchart1 = new BarChart(d3.select("#barchart1"), citiesToCitiesPassFormatted, "departure", MyEventHandler);
+                var barchart2 = new BarChart(d3.select("#barchart2"), citiesToCitiesPassFormatted, "arrival",  MyEventHandler);
+               
                 var table = new Table(d3.select("table"), airlineRouteCounts, MyEventHandler);
                 var worldmap = new WorldMap(d3.select("#worldmap"), citiesToCities, metaDataCities, countriesToCountries, MyEventHandler);
                 var linechart = new LineChart(d3.select("#linechart"), citiesToCitiesPassFormatted, metaDataCities, MyEventHandler);
@@ -105,6 +108,7 @@
 
                     console.log(args);
                     barchart1.onSelectionChange(args);
+                    barchart2.onSelectionChange(args);
         
                   });
 

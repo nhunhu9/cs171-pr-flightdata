@@ -1,12 +1,23 @@
-//Based on template from http://jsfiddle.net/PcjUR/116/
+/* TODO: 
+Color / Continent
+Selection Changed (incl. title changing)
+reduce to one chart? / understand, check data
 
-BarChart = function(_parentElement, _data, _eventHandler){
+*/
+
+BarChart = function(_parentElement, _data, _mode, _eventHandler){
   
   this.parentElement = _parentElement;
   this.data = _data;
   this.eventHandler = _eventHandler;
-  this.displayData = [];
-  this.circle = [];
+  this.displayData = [];  
+  this.mode = _mode;
+
+  if (this.mode == "arrival") {
+    this.key = function(d) { return d.arrival_country; }
+  } else if (this.mode == "departure") {
+    this.key = function(d) { return d.departure_country; }  
+  } 
 
   this.initVis();
 }
@@ -18,12 +29,14 @@ BarChart.prototype.initVis = function(){
 
   var margin = {
       top: 10,
-      right: 30,
+      right: 120,
       bottom: 10,
-      left: 80
+      left: 120
   };
-  this.width = width = 300 - margin.left - margin.right;
+  this.width = width = 360 - margin.left - margin.right;
   this.height = height = 200 - margin.top - margin.bottom;
+
+
 
   this.svg = this.parentElement.append("svg")
       .attr("width", width + margin.left + margin.right)
@@ -34,37 +47,41 @@ BarChart.prototype.initVis = function(){
 
  this.titleElement = this.svg.insert("text", ":first-child")
     .attr("class", "title")
-    .attr("transform", "translate(" + -margin.left + ",0)");
+ //   .attr("transform", "translate(" + -margin.left + ",0)");
   
-  this.wrangleData(function(d) { return d.origin.country != d.destination.country; }, function(a,b) {return b.number_of_passengers[2010]-a.number_of_passengers[2010]; },function(d) { return d.destination.country; }, "Top Flight Destinations");
-  
-  this.updateVis(true);
+    this.onSelectionChange({level:"world"}, true);
 
 }
 
 // level: default: city, alternative: country
-BarChart.prototype.wrangleData= function(_filterFunction, _sort, _label, _title){
+BarChart.prototype.wrangleData= function(_filterFunction, _value, _title){
 
   that = this;
 
   this.title = _title;
 
-  this.displayData = this.filterAndAggregate(_filterFunction, _sort).map(function (d) {
-      var i = Math.floor(Math.random() * 1) //color
+  this.displayData = this.filterAndAggregate(_filterFunction, _value).map(function (d) {
       return {
-          label: _label(d),
-          value: d.number_of_routes
+          label: d.key,
+          value: d.values,
+          //color: colorScale(d), write function to get continent
       };
 
   });
 
 }
 
-BarChart.prototype.filterAndAggregate = function(_filter, _sort){
-    return [{"origin":{"country":"China","longitude":105,"latitude":35},"destination":{"country":"Taiwan","longitude":121,"latitude":23.5},"number_of_routes":165},{"origin":{"country":"China","longitude":105,"latitude":35},"destination":{"country":"Japan","longitude":138,"latitude":36},"number_of_routes":146},{"origin":{"country":"China","longitude":105,"latitude":35},"destination":{"country":"South Korea","longitude":127.5,"latitude":37},"number_of_routes":120},{"origin":{"country":"China","longitude":105,"latitude":35},"destination":{"country":"Hong Kong","longitude":114.17,"latitude":22.25},"number_of_routes":107},{"origin":{"country":"China","longitude":105,"latitude":35},"destination":{"country":"United States","longitude":-97,"latitude":38},"number_of_routes":49},{"origin":{"country":"China","longitude":105,"latitude":35},"destination":{"country":"Thailand","longitude":100,"latitude":15},"number_of_routes":42},{"origin":{"country":"China","longitude":105,"latitude":35},"destination":{"country":"Macau","longitude":113.55,"latitude":22.17},"number_of_routes":37},{"origin":{"country":"China","longitude":105,"latitude":35},"destination":{"country":"Singapore","longitude":103.8,"latitude":1.37},"number_of_routes":37},{"origin":{"country":"China","longitude":105,"latitude":35},"destination":{"country":"Russia","longitude":100,"latitude":60},"number_of_routes":34},{"origin":{"country":"China","longitude":105,"latitude":35},"destination":{"country":"Malaysia","longitude":112.5,"latitude":2.5},"number_of_routes":22},{"origin":{"country":"China","longitude":105,"latitude":35},"destination":{"country":"Philippines","longitude":122,"latitude":13},"number_of_routes":19},{"origin":{"country":"China","longitude":105,"latitude":35},"destination":{"country":"Germany","longitude":9,"latitude":51},"number_of_routes":17},{"origin":{"country":"China","longitude":105,"latitude":35},"destination":{"country":"Australia","longitude":133,"latitude":-27},"number_of_routes":16},{"origin":{"country":"China","longitude":105,"latitude":35},"destination":{"country":"Vietnam","longitude":107.83,"latitude":16.17},"number_of_routes":15},{"origin":{"country":"China","longitude":105,"latitude":35},"destination":{"country":"Netherlands","longitude":5.75,"latitude":52.5},"number_of_routes":13},{"origin":{"country":"China","longitude":105,"latitude":35},"destination":{"country":"United Arab Emirates","longitude":54,"latitude":24},"number_of_routes":13},{"origin":{"country":"China","longitude":105,"latitude":35},"destination":{"country":"Canada","longitude":-95,"latitude":60},"number_of_routes":12},{"origin":{"country":"China","longitude":105,"latitude":35},"destination":{"country":"India","longitude":77,"latitude":20},"number_of_routes":8},{"origin":{"country":"China","longitude":105,"latitude":35},"destination":{"country":"Burma","longitude":98,"latitude":22},"number_of_routes":7},{"origin":{"country":"China","longitude":105,"latitude":35},"destination":{"country":"United Kingdom","longitude":-2,"latitude":54},"number_of_routes":7}].slice(0,10)
-  return this.data.filter(function(d) {
+BarChart.prototype.filterAndAggregate = function(_filter, _value){
+  var filtered_data = this.data.filter(function(d) {
     return _filter(d);
-  }).sort(_sort).slice(0,10)
+  })
+
+  var nested_data = d3.nest()
+    .key(this.key)
+    .rollup(function(leaves) { return d3.sum(leaves, function(d) {return parseFloat(_value(d));}) })
+    .entries(filtered_data);
+
+  return nested_data.sort(function(a,b) {return b.values-a.values; }).slice(0,10)
 
 }
 
@@ -115,6 +132,8 @@ BarChart.prototype.updateVis = function(init){
         .attr("y", 0)
         .attr("dy", ".8em")
         .attr("class", "values")
+
+    groups.exit().remove();
         
       
       //Update all
@@ -154,11 +173,27 @@ BarChart.prototype.updateVis = function(init){
 
 
 
-BarChart.prototype.onSelectionChange= function (){
+BarChart.prototype.onSelectionChange= function (args, init){
+  var that = this;
+  if (args.level == "world") {
+      this.wrangleData(
+      function(d) { return d.departure_country != d.arrival_country; }, 
+      function(d) { return d.no_2010; },
+      that.mode == "arrival" ? "Top 10 Flight Destinations (Worldwide)" : "Top 10 Flight Origins (Worldwide)"
+    );
+  
+    this.updateVis();
+  } else if (args.level == "country") {
+    var country = args.subitemClicked.properties.name;
 
-    this.wrangleData(function(d) { return d.origin.country != d.destination.country; }, function(a,b) {return b.number_of_passengers[2010]-a.number_of_passengers[2010]; },function(d) { return d.number_of_routes; }, "Top Flight Destinations:");
-
-  this.updateVis();
+    this.wrangleData(
+      function(d) { return (that.mode == "arrival" ? d.departure_country : d.arrival_country) ==  country}, 
+      function(d) { return d.no_2010; },
+      (that.mode == "arrival" ? "Top 10 Flight Destinations (from " : "Top 10 Flight Origins (to ") + country + ")"
+    );
+  
+    this.updateVis();
+  }
 }
 
   
