@@ -119,7 +119,7 @@ WorldMap.prototype.initVis = function(){
 
  // this.wrangleData(function(d) { return d.origin.country != d.destination.country; }, "country");
 
- this.wrangleData(null );
+ this.wrangleData(null);
 
   this.updateVis();
 }
@@ -165,9 +165,6 @@ WorldMap.prototype.updateVis = function(){
   this.map.arc(this.displayData);
 }
 
-
-WorldMap.prototype.onSelectionChange= function (ranges){
-}
 
 WorldMap.prototype.addResetZoomButton = function(container){
     var that = this;

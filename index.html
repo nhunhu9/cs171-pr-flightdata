@@ -26,7 +26,7 @@
     <script src = "js/worldmap.js"></script>
     <script src = "js/table.js"></script>
     <script src = "js/linechart.js"></script>
-    <script src = "js/bubblechart.js"></script>
+    <script src = "js/barchart.js"></script>
 
     <!-- add own stylesheet-->
     <link rel="stylesheet" type="text/css" href="css/myStyle.css">
@@ -59,7 +59,7 @@
             <div id="linechart" class="col-md-8">
                 <svg width="650" height="330"></svg>
             </div>
-            <div id="bubblechart1" class="col-md-2"></div>
+            <div id="barchart1" class="col-md-2"></div>
         </div>
 
         <div class="row">
@@ -96,20 +96,15 @@
 
                 var MyEventHandler = new Object();
                 
-                var bubblechart1 = new BubbleChart(d3.select("#bubblechart1"), citiesToCitiesPass, MyEventHandler);
+                var barchart1 = new BarChart(d3.select("#barchart1"), citiesToCitiesPass, MyEventHandler);
                 var table = new Table(d3.select("table"), airlineRouteCounts, MyEventHandler);
                 var worldmap = new WorldMap(d3.select("#worldmap"), citiesToCities, metaDataCities, countriesToCountries, MyEventHandler);
                 var linechart = new LineChart(d3.select("#linechart"), citiesToCitiesPassFormatted, metaDataCities, MyEventHandler);
-        
-                $(MyEventHandler).bind("selectionChanged", function(event, brush){
-                      worldmap.onSelectionChange(ranges);
-                });
                 
                 $(MyEventHandler).bind("selectionChanged", function(event, args){
 
-                    console.log(args.level);
-                    console.log(args.subitemClicked);
-                    bubblechart1.onSelectionChange();
+                    console.log(args);
+                    barchart1.onSelectionChange(args);
         
                   });
 
