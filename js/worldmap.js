@@ -50,28 +50,34 @@ WorldMap.prototype.initVis = function(){
       that.updateVis();               
     }, 
     subunitClicked: function(g) {
-      that.map.updateScope(g.id);
+      if (g.type == "continent") {
 
-      that.zoomBehavior.scale(1).translate([0, 0]);  
-      that.map.resetZoom(0); 
+            // TODO: Show all flights ruoutes for selected continent
+            $(that.eventHandler).trigger("selectionChanged", {level: "continent", subitemClicked: g});
 
-      d3.select("#addBackToWorldButton").attr("style", "");
+      } else {
+        that.map.updateScope(g.id);
 
-      that.map.svg.selectAll("g")
-        .style("opacity", 0)
-        .transition()
-        .duration(750)
-        .delay(300)
-        .style("opacity", 1)
-        .call(that.map.endAll, function () {
+        that.zoomBehavior.scale(1).translate([0, 0]);  
+        that.map.resetZoom(0); 
 
-          that.wrangleData(function(d) { return d.origin.country == g.properties.name  && d.origin.country == d.destination.country}, "city");
-          that.updateVis();    
-          that.map.options.done(that.map);
+        d3.select("#addBackToWorldButton").attr("style", "");
 
-          $(that.eventHandler).trigger("selectionChanged", {level: "country", subitemClicked: g});
-        });
-  
+        that.map.svg.selectAll("g")
+          .style("opacity", 0)
+          .transition()
+          .duration(750)
+          .delay(300)
+          .style("opacity", 1)
+          .call(that.map.endAll, function () {
+
+            that.wrangleData(function(d) { return d.origin.country == g.properties.name  && d.origin.country == d.destination.country}, "city");
+            that.updateVis();    
+            that.map.options.done(that.map);
+
+            $(that.eventHandler).trigger("selectionChanged", {level: "country", subitemClicked: g});
+          });
+      }
 
     },
    subunitMouseover: function(g) {
@@ -88,36 +94,20 @@ WorldMap.prototype.initVis = function(){
 
       //TODO: set a default filter 
     } 
-  });
+  }, this);
 
-/* Custom Map
-    this.map = new Datamap({
-    element: document.getElementById('worldmap'),
-    geographyConfig: {
-      dataUrl: 'data/custom_maps/ne_10m_admin_1_states_provinces/json/DEU.topo.json'
-    },
-    scope: 'DEU',
-    fills: {
-      defaultFill: '#bada55',
-      someKey: '#fa0fa0'
-    },
-    setProjection: function(element) {
-      var projection = d3.geo.mercator()
-        .scale(100)
-        .translate([element.offsetWidth / 2, element.offsetHeight / 2]);
-
-       var path = d3.geo.path().projection(projection);
-       return {path: path, projection: projection};
-    }
-  });
-*/
 
   this.addResetZoomButton(this.parentElement);
   this.addBackToWorldButton(this.parentElement);
 
-  //this.addFocusCountryButton("usa", this.parentElement);
+// Setup Continent Filters
 
- // this.wrangleData(function(d) { return d.origin.country != d.destination.country; }, "country");
+
+  d3.selectAll(".continent_filter").on("change", function() { 
+    if (this.checked)
+      that.map.zoomContinent(this.value);
+  });
+
 
  this.wrangleData(null);
 

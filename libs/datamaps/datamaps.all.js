@@ -568,9 +568,22 @@
     var dx      =  bounds[1][0] - bounds[0][0],
         dy      =  bounds[1][1] - bounds[0][1],
         x       = (bounds[0][0] + bounds[1][0]) / 2,
-        y       = (bounds[0][1] + bounds[1][1]) / 2,
-        scale   = zoomFactor / Math.max(dx / width, dy / height),
+        y       = (bounds[0][1] + bounds[1][1]) / 2
+
+    if (d.type == "continent") {
+      var bbox = this.continentBounds[d.id];
+
+       var dx = bbox.width, 
+        dy = bbox.height, 
+        x = bbox.x + bbox.width / 2,
+        y = bbox.y + bbox.height / 2
+    }
+
+    var  scale   = zoomFactor / Math.max(dx / width, dy / height),
         translate = [width / 2 - scale * x, height / 2 - scale * y];
+
+   this.parent.zoomBehavior.scale(scale).translate(translate); 
+      
 
     self.svg.selectAll("path")
       .classed("active", centered && function( d ) { return d === centered; });
@@ -580,7 +593,7 @@
       .duration(1000)
       .style("stroke-width", 1.5 / scale + "px")
       .attr("transform", "translate(" + translate + ")scale(" + scale + ")")
-      .style("opacity", 0)
+      .style("opacity", bbox ? 1 : 0)
       .call(self.endAll, function () {
         self.options.subunitClicked(d);
       })
@@ -601,11 +614,13 @@
              Public Functions
   ***************************************/
 
-  function Datamap( options ) {
+  function Datamap( options, _parent ) {
 
     if ( typeof d3 === 'undefined' || typeof topojson === 'undefined' ) {
       throw new Error('Include d3.js (v3.0.3 or greater) and topojson on this page before creating a new map');
    }
+
+   this.parent = _parent;
     //set options for global use
     this.options = defaults(options, defaultOptions);
     this.options.geographyConfig = defaults(options.geographyConfig, defaultOptions.geographyConfig);
@@ -692,6 +707,7 @@
     //set projections and paths based on scope
     var pathAndProjection = options.setProjection.apply(self, [options.element, options] );
 
+
     this.path = pathAndProjection.path;
     this.projection = pathAndProjection.projection;
 
@@ -769,6 +785,12 @@
 
   }
 
+  Datamap.prototype.zoomContinent = function(continent) {
+    var self = this;
+
+    clickZoom.call(self, {type:"continent", "id": continent});
+  }
+
   Datamap.prototype.getIdByCountryName = function(country_name) {
     var res = this.worldTopo.objects["world"].geometries.filter(function(d) { 
       return d.properties.name == country_name });
@@ -787,6 +809,38 @@
       return res[0].properties.name;
     else
       return null;
+  }
+
+  /*Africa: <rect x="440" width="217.75" y="368" height="230" style="fill:#000; opacity:50%"></rect>
+<rect x="810" width="140" y="512" height="110" style="fill:#000;opacity:50%"></rect>
+<rect x="430" width="183" y="190" height="190" style="fill:#000;opacity:50%"></rect>
+<rect x="30" width="440" y="20" height="650" style="fill:#000;opacity:50%"></rect> */
+
+  Datamap.prototype.continentBounds = {
+    "Africa": {
+      x: 440,
+      width: 217.75,
+      y: 368,
+      height: 230
+    },
+    "Oceania": {
+      x: 810,
+      width: 140,
+      y: 512,
+      height: 110
+    },
+    "Europe": {
+      x: 430,
+      width: 183,
+      y: 205,
+      height: 170
+    },
+    "Americas": {
+      x: 30,
+      width: 440,
+      y: 20,
+      height: 650
+    }
   }
 
   /**************************************
