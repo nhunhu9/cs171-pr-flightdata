@@ -206,7 +206,8 @@ WorldMap.prototype.addBackToWorldButton = function(container){
               .style("opacity", 1)
               .call(that.map.endAll, function () {
 
-                d3.select("#addResetZoomButton").attr("style", "display:none");
+              d3.select("#addBackToWorldButton").attr("style", "display:none");
+              d3.select("#addResetZoomButton").attr("style", "");
 
                 //TODO: set a default filter 
                 that.map.options.done(that.map);
