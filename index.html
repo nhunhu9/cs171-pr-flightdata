@@ -60,7 +60,6 @@
                 <svg width="650" height="330"></svg>
             </div>
             <div id="barchart1" class="col-md-2"></div>
-            <div id="barchart2" class="col-md-2"></div>
         </div>
 
         <div class="row">
@@ -97,8 +96,7 @@
 
                 var MyEventHandler = new Object();
                 
-                var barchart1 = new BarChart(d3.select("#barchart1"), citiesToCitiesPassFormatted, "departure", MyEventHandler);
-                var barchart2 = new BarChart(d3.select("#barchart2"), citiesToCitiesPassFormatted, "arrival",  MyEventHandler);
+                var barchart1 = new BarChart(d3.select("#barchart1"), metaDataCities, MyEventHandler);
                
                 var table = new Table(d3.select("table"), airlineRouteCounts, MyEventHandler);
                 var worldmap = new WorldMap(d3.select("#worldmap"), citiesToCities, metaDataCities, countriesToCountries, MyEventHandler);
@@ -108,7 +106,6 @@
 
                     console.log(args);
                     barchart1.onSelectionChange(args);
-                    barchart2.onSelectionChange(args);
         
                   });
 
@@ -180,6 +177,7 @@
                                 only_domestic_flights: (d["only_domestic_flights"] == 1 ? true : false)
                             } 
                         });
+
 
                         airlineRouteCounts = _airlineRouteCounts;
 
