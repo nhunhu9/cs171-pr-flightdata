@@ -65,6 +65,7 @@ WorldMap.prototype.initVis = function(){
         that.map.resetZoom(0); 
 
         d3.select("#addBackToWorldButton").attr("style", "");
+        d3.select("#addResetZoomButton").attr("style", "");
 
         that.map.svg.selectAll("g")
           .style("opacity", 0)
