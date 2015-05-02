@@ -66,3 +66,5 @@ tr::before{
 tr::after{
 	display: none !important;
 }
+
+#airline_ranking_wrapper > div:nth-child(1) > div:nth-child(1) { display: none;}
