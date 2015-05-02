@@ -5,19 +5,22 @@ reduce to one chart? / understand, check data
 
 */
 
-BarChart = function(_parentElement, _data, _mode, _eventHandler){
+BarChart = function(_parentElement, _data, _eventHandler){
   
   this.parentElement = _parentElement;
   this.data = _data;
   this.eventHandler = _eventHandler;
   this.displayData = [];  
-  this.mode = _mode;
 
-  if (this.mode == "arrival") {
-    this.key = function(d) { return d.arrival_country; }
-  } else if (this.mode == "departure") {
-    this.key = function(d) { return d.departure_country; }  
-  } 
+  this.country_codes = {
+    "United Kingdom": "UK",
+    "United States": "US",
+    "France": "FRA",
+    "Russia": "RU",
+    "China": "CN",
+    "Germany": "GER"
+  }
+
 
   this.initVis();
 }
@@ -31,7 +34,7 @@ BarChart.prototype.initVis = function(){
       top: 10,
       right: 120,
       bottom: 10,
-      left: 120
+      left: 120*1.4
   };
   this.width = width = 360 - margin.left - margin.right;
   this.height = height = 300 - margin.top - margin.bottom;
@@ -48,14 +51,14 @@ BarChart.prototype.initVis = function(){
 
  this.titleElement = this.svg.insert("text", ":first-child")
     .attr("class", "title")
- //   .attr("transform", "translate(" + -margin.left + ",0)");
+    .attr("transform", "translate(" + -margin.left + ",0)");
   
     this.onSelectionChange({level:"world"}, true);
 
 }
 
 // level: default: city, alternative: country
-BarChart.prototype.wrangleData= function(_filterFunction, _value, _title){
+BarChart.prototype.wrangleData= function(_filterFunction, _value, _label, _title){
 
   that = this;
 
@@ -63,8 +66,8 @@ BarChart.prototype.wrangleData= function(_filterFunction, _value, _title){
 
   this.displayData = this.filterAndAggregate(_filterFunction, _value).map(function (d) {
       return {
-          label: d.key,
-          value: d.values,
+          label: _label(d),
+          value: _value(d),
           //color: colorScale(d), write function to get continent
       };
 
@@ -73,16 +76,11 @@ BarChart.prototype.wrangleData= function(_filterFunction, _value, _title){
 }
 
 BarChart.prototype.filterAndAggregate = function(_filter, _value){
-  var filtered_data = this.data.filter(function(d) {
+  return this.data.filter(function(d) {
     return _filter(d);
   })
-
-  var nested_data = d3.nest()
-    .key(this.key)
-    .rollup(function(leaves) { return d3.sum(leaves, function(d) {return parseFloat(_value(d));}) })
-    .entries(filtered_data);
-
-  return nested_data.sort(function(a,b) {return b.values-a.values; }).slice(0,10)
+  .sort(function(a,b) {return _value(b)-_value(a); })
+  .slice(0,10)
 
 }
 
@@ -175,11 +173,19 @@ BarChart.prototype.updateVis = function(init){
 
 
 BarChart.prototype.onSelectionChange= function (args, init){
+
   var that = this;
   if (args.level == "world") {
       this.wrangleData(
+
       function(d) { return d.departure_country != d.arrival_country; }, 
-      function(d) { return d.no_2010; }
+      function(d) { return d.no_2010; },
+
+      function(d) { return true; }, 
+      function(d) { return d.number_of_routes; },
+      function(d) { return d.most_active_airport.name + " (" + that.country_codes[d.country] + ")"; },
+      "Top 10 airports by number of routes (Worldwide)"
+
     );
   
     this.updateVis();
@@ -187,8 +193,23 @@ BarChart.prototype.onSelectionChange= function (args, init){
     var country = args.subitemClicked.properties.name;
 
     this.wrangleData(
+
       function(d) { return (that.mode == "arrival" ? d.departure_country : d.arrival_country) ==  country}, 
-      function(d) { return d.no_2010; }
+      function(d) { return d.no_2010; },
+      function(d) { return d.country ==  country}, 
+      function(d) { return d.number_of_routes; },
+      function(d) { return d.most_active_airport.name;},
+      "Top 10 airports by number of routes ("  + country + ")"
+    );
+
+    this.updateVis();
+  } else if (args.level == "continent") {
+    var continent = args.subitemClicked.id;
+
+    this.wrangleData(
+      function(d) { return false; }, 
+      function(d) { return d.number_of_routes; },
+      "TBD"
     );
   
     this.updateVis();

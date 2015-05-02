@@ -52,7 +52,14 @@ WorldMap.prototype.initVis = function(){
     subunitClicked: function(g) {
       if (g.type == "continent") {
 
+
             // TODO: Show all flights routes for selected continent
+
+          d3.select("#addBackToWorldButton").attr("style", "");
+          d3.select("#addResetZoomButton").attr("style", "display:none");
+
+            // TODO: Show all flights ruoutes for selected continent
+
             $(that.eventHandler).trigger("selectionChanged", {level: "continent", subitemClicked: g});
 
       } else {
@@ -62,6 +69,7 @@ WorldMap.prototype.initVis = function(){
         that.map.resetZoom(0); 
 
         d3.select("#addBackToWorldButton").attr("style", "");
+        d3.select("#addResetZoomButton").attr("style", "");
 
         that.map.svg.selectAll("g")
           .style("opacity", 0)
@@ -161,6 +169,7 @@ WorldMap.prototype.addResetZoomButton = function(container){
 
     var button = container.insert("button", ":first-child")
       .attr("class", "btn btn-sm btn-primary")
+      .attr("id", "addResetZoomButton")
       .text("⇔ Reset Zoom")
       .on("click", function() { 
         that.zoomBehavior.scale(1).translate([0, 0]);  
@@ -200,8 +209,13 @@ WorldMap.prototype.addBackToWorldButton = function(container){
               .delay(750)
               .style("opacity", 1)
               .call(that.map.endAll, function () {
+
+              d3.select("#addBackToWorldButton").attr("style", "display:none");
+              d3.select("#addResetZoomButton").attr("style", "");
+
                 //TODO: set a default filter 
                 that.map.options.done(that.map);
+
 
                 $(that.eventHandler).trigger("selectionChanged", {level: "world" });
               });

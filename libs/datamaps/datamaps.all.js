@@ -814,7 +814,8 @@
   /*Africa: <rect x="440" width="217.75" y="368" height="230" style="fill:#000; opacity:50%"></rect>
 <rect x="810" width="140" y="512" height="110" style="fill:#000;opacity:50%"></rect>
 <rect x="430" width="183" y="190" height="190" style="fill:#000;opacity:50%"></rect>
-<rect x="30" width="440" y="20" height="650" style="fill:#000;opacity:50%"></rect> */
+<rect x="30" width="440" y="20" height="650" style="fill:#000;opacity:50%"></rect> 
+<rect x="575" width="420" y="73" height="445" style="fill:#000;opacity:50%"></rect>*/
 
   Datamap.prototype.continentBounds = {
     "Africa": {
@@ -840,6 +841,12 @@
       width: 440,
       y: 20,
       height: 650
+    },
+    "Asia": {
+      x: 575,
+      width: 420,
+      y: 73,
+      height: 445
     }
   }
 
