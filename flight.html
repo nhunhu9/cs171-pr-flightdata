@@ -145,7 +145,7 @@
 
         <div class="row bottom">
             <div id="linechart" class="col-md-6">
-                <h3 class="heading"> Crash Data </h3>
+                <h3 class="heading"> Passenger Numbers </h3>
                 <svg class="line" width="650" height="330"></svg>
             </div>
             
@@ -176,9 +176,10 @@
 
                 var MyEventHandler = new Object();
                 
-                var barchart2 = new BarChart(d3.select("#barchart2"), citiesToCitiesPassFormatted, "arrival",  MyEventHandler);
-               
-                var table = new Table(d3.select("table"), airlineRouteCounts, MyEventHandler);
+             
+                var barchart2 = new BarChart(d3.select("#barchart2"), metaDataCities, MyEventHandler);  
+                 var table = new Table(d3.select("table"), airlineRouteCounts, MyEventHandler);
+
                 var worldmap = new WorldMap(d3.select("#worldmap"), citiesToCities, metaDataCities, countriesToCountries, MyEventHandler);
                 var linechart = new LineChart(d3.select("#linechart"), citiesToCitiesPassFormatted, metaDataCities, MyEventHandler);
                 

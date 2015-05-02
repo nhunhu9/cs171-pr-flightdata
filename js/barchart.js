@@ -37,14 +37,13 @@ BarChart.prototype.initVis = function(){
       left: 120*1.4
   };
   this.width = width = 360 - margin.left - margin.right;
-  this.height = height = 300 - margin.top - margin.bottom;
+  this.height = height = 200 - margin.top - margin.bottom;
 
 
 
   this.svg = this.parentElement.append("svg")
       .attr("width", width + margin.left + margin.right)
       .attr("height", height + margin.top + margin.bottom)
-      .attr("class", "bar")
       .append("g")
       .attr("transform", "translate(" + margin.left + "," + margin.top + ")");
 
@@ -105,7 +104,7 @@ BarChart.prototype.updateVis = function(init){
       this.xScale.domain([this.min, this.max]);
       colorScale.domain([this.min, this.max]);
       
-      this.bar_height = 20 //height / (data_draw.length + 5);
+      this.bar_height = 10 //height / (data_draw.length + 5);
       
       groups = this.svg.selectAll("g").data(this.displayData);    
       groups.enter()
@@ -177,15 +176,10 @@ BarChart.prototype.onSelectionChange= function (args, init){
   var that = this;
   if (args.level == "world") {
       this.wrangleData(
-
-      function(d) { return d.departure_country != d.arrival_country; }, 
-      function(d) { return d.no_2010; },
-
       function(d) { return true; }, 
       function(d) { return d.number_of_routes; },
       function(d) { return d.most_active_airport.name + " (" + that.country_codes[d.country] + ")"; },
       "Top 10 airports by number of routes (Worldwide)"
-
     );
   
     this.updateVis();
@@ -193,9 +187,6 @@ BarChart.prototype.onSelectionChange= function (args, init){
     var country = args.subitemClicked.properties.name;
 
     this.wrangleData(
-
-      function(d) { return (that.mode == "arrival" ? d.departure_country : d.arrival_country) ==  country}, 
-      function(d) { return d.no_2010; },
       function(d) { return d.country ==  country}, 
       function(d) { return d.number_of_routes; },
       function(d) { return d.most_active_airport.name;},

@@ -21,13 +21,19 @@ WorldMap.prototype.initVis = function(){
         return l.number_of_routes;
       }))
 
+  this.arcWidthScale = d3.scale.log()
+    .range([0.4, 3.7]);
+
+  this.arcOpacityScale = d3.scale.log()
+    .range([0.01, 1.0]);
+
   this.zoomBehavior = d3.behavior.zoom();
 
  this.map =  new Datamap({
     element: document.getElementById("worldmap"),
     projection: "mercator",
     arcConfig: {
-      strokeColor: "#00BFFF",
+      strokeColor: "darkblue",
       strokeWidth: 0.3,
       arcSharpness: 0.5,
       animationSpeed: 500
@@ -154,13 +160,24 @@ WorldMap.prototype.filterAndAggregate = function(_filter, level){
 WorldMap.prototype.updateVis = function(){
   var that = this;
 
+
+  this.arcOpacityScale.domain(d3.extent(d3.selectAll(".datamaps-arc"), function(l) { 
+    return l.number_of_routes; }));
+
   this.displayData.forEach(function(d){
     d.options = {};
-    d.options.strokeColor = that.arc_color_scale(d.number_of_routes);
+   // d.options.strokeColor = that.arc_color_scale(d.number_of_routes);
+    //d.options.strokeWidth = that.arcWidthScale(d.number_of_routes);
     d.options.greatArc = true;
   })
 
   this.map.arc(this.displayData);
+
+
+  d3.selectAll(".datamaps-arc").style("opacity", function(d) { 
+      return that.arcOpacityScale(d.number_of_routes);
+      }
+    );
 }
 
 
