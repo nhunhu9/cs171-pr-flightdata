@@ -1,4 +1,6 @@
 WorldMap = function(_parentElement, _data, _metaData, _countriesToCountries, _eventHandler){
+
+  var that = this;
   
   this.parentElement = _parentElement;
   this.data = _data;
@@ -8,7 +10,7 @@ WorldMap = function(_parentElement, _data, _metaData, _countriesToCountries, _ev
   this.displayData = [];
 
 
-  this.selectableCountries = ["USA", "DEU"];
+  this.selectableCountries = ["USA", "DEU", "JPN"];
 
   this.initVis();
 }
@@ -17,6 +19,12 @@ WorldMap = function(_parentElement, _data, _metaData, _countriesToCountries, _ev
 WorldMap.prototype.initVis = function(){
 
   var that = this; 
+
+
+  d3.select("#routevis").on("click", function(d) { 
+    console.log(that.zoomBehavior.scale());
+    console.log(that.zoomBehavior.translate());
+  } )
 
   this.arc_color_scale =  d3.scale.log()
       .range(["red", "blue", "black"])
