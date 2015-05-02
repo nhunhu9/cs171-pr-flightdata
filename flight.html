@@ -27,6 +27,7 @@
     <script src = "js/table.js"></script>
     <script src = "js/linechart.js"></script>
     <script src = "js/barchart.js"></script>
+    <script src = "js/toCapital.js"></script>
 
     <!-- add own stylesheet-->
     <link rel="stylesheet" type="text/css" href="css/myStyle.css">
@@ -181,7 +182,7 @@
                  var table = new Table(d3.select("table"), airlineRouteCounts, MyEventHandler);
 
                 var worldmap = new WorldMap(d3.select("#worldmap"), citiesToCities, metaDataCities, countriesToCountries, MyEventHandler);
-                var linechart = new LineChart(d3.select("#linechart"), citiesToCitiesPassFormatted, metaDataCities, MyEventHandler);
+                // var linechart = new LineChart(d3.select("#linechart"), countryList, UNData, MyEventHandler);
                 
                 $(MyEventHandler).bind("selectionChanged", function(event, args){
 
@@ -192,7 +193,7 @@
 
             }
 
-            var dataLoaded = function (error, _citiesToCities, _metaDataCities, _completeTable, _airlineRouteCounts, _countriesToCountries, _citiesToCitiesPassFormatted, _citiesToCitiesPass) {
+            var dataLoaded = function (error, _citiesToCities, _metaDataCities, _completeTable, _airlineRouteCounts, _countriesToCountries, _countryList, _UNData) {
 
                 if (!error) {
 
@@ -389,43 +390,48 @@
                                     .filter(function(n) { return n.destination.country == google_country_name; }))
                             });
                         }*/
-                    citiesToCitiesPassFormatted = _citiesToCitiesPassFormatted.map(function (d){
-                        return {
-                            departure_city: d["depCity"],
-                            departure_country : d["depCountry"],
-                            arrival_city: d["arrCity"],
-                            arrival_country: d["arrCountry"],
-                            no_1990: d["pass_1990"],
-                            no_1995: d["pass_1995"],
-                            no_2000: d["pass_2000"],
-                            no_2005: d["pass_2005"],
-                            no_2010: d["pass_2010"]
-                        }
-                    })
-                       
 
-                    citiesToCitiesPass = _citiesToCitiesPass.map(function (d) {
+                    // citiesToCitiesPass = _citiesToCitiesPass.map(function (d) {
         
                  
-                        return {
-                            origin: {
-                                city: d["city departure"],
-                                country: d["country departure"],
-                                state: d["state departure"]
-                            },
-                            destination: {
-                                city: d["city arrival"],
-                                country: d["country arrival"],
-                                state: d["state arrival"]
-                            },
+                    //     return {
+                    //         origin: {
+                    //             city: d["city departure"],
+                    //             country: d["country departure"],
+                    //             state: d["state departure"]
+                    //         },
+                    //         destination: {
+                    //             city: d["city arrival"],
+                    //             country: d["country arrival"],
+                    //             state: d["state arrival"]
+                    //         },
 
-                            number_of_passengers: {
-                                2000: parseInt(d["number passengers 2000"]),
-                                2005: parseInt(d["number passengers 2005"]),
-                                2010: parseInt(d["number passengers 2010"])
-                            }
-                        } 
+                    //         number_of_passengers: {
+                    //             2000: parseInt(d["number passengers 2000"]),
+                    //             2005: parseInt(d["number passengers 2005"]),
+                    //             2010: parseInt(d["number passengers 2010"])
+                    //         }
+                    //     } 
+                    // });
+                    countryList = {};
+                    _countryList.map(function(d){
+                        countryList[d["name"]] = d["continent"];
                     });
+                    console.log(countryList);
+
+                    UNData = Object.keys(_UNData).map(function(d){
+                        return {
+                            name: d.capitalizeFirstLetter(),
+                            continent: (countryList[d.capitalizeFirstLetter()]) ? countryList["d"] : "Unknown",
+                            data: _UNData[d]
+                        }
+                    });
+                    UNData.map(function(d){
+                        if (d.continent == "Unknown"){
+                            console.log(d);
+                        }
+                    })
+
 
                     initVis();
                 }
@@ -447,9 +453,9 @@
                 .defer(d3.csv, 'data/openflight_db/citiesTable.csv')
                 .defer(d3.csv, 'data/openflight_db/completeTable.csv')  
                 .defer(d3.json, 'data/openflight_db/airlineRoutesCounts.json')  
-                .defer(d3.csv, 'data/openflight_db/countriesToCountries.csv')
-                .defer(d3.csv, 'data/openflight_db/citiesToCitiesPassFormatted.csv') 
-                .defer(d3.csv, 'data/openflight_db/citiesToCitiesPass_zz.csv')  
+                .defer(d3.csv, 'data/openflight_db/countriesToCountries.csv') 
+                .defer(d3.csv, 'data/countrylist.csv')
+                .defer(d3.json, 'data/UNData.json')
 				.await(dataLoaded);
 
             }
