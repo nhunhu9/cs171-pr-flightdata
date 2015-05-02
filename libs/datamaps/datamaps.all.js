@@ -549,6 +549,9 @@
     || isNaN(zoomFactor)
     || zoomFactor <= 0) return this.resetZoom();
 
+    if (this.parent.selectableCountries.indexOf(d.id) < 0) 
+      return;
+
       self.options.subunitClick(d);  
 
     self.svg.selectAll("path").classed("active", false);

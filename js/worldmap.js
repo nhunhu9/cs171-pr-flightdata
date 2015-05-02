@@ -7,6 +7,9 @@ WorldMap = function(_parentElement, _data, _metaData, _countriesToCountries, _ev
   this.eventHandler = _eventHandler;
   this.displayData = [];
 
+
+  this.selectableCountries = ["USA", "DEU"];
+
   this.initVis();
 }
 
@@ -50,6 +53,12 @@ WorldMap.prototype.initVis = function(){
       function redraw() {
         datamap.svg.selectAll("g").attr("transform", "translate(" + d3.event.translate + ")scale(" + d3.event.scale + ")");
       }
+
+      d3.selectAll("path.datamaps-subunit").filter(function(d) {
+        return that.selectableCountries.indexOf(d.id) >= 0;
+      })
+      .style("stroke", "black")
+      .each(function() { this.parentNode.appendChild(this); });;
     },
     subunitClick: function(g) {
       that.wrangleData(null);
