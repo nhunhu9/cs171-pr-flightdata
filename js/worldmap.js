@@ -52,7 +52,7 @@ WorldMap.prototype.initVis = function(){
     subunitClicked: function(g) {
       if (g.type == "continent") {
 
-            // TODO: Show all flights ruoutes for selected continent
+            // TODO: Show all flights routes for selected continent
             $(that.eventHandler).trigger("selectionChanged", {level: "continent", subitemClicked: g});
 
       } else {

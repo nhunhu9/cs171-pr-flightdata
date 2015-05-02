@@ -1,5 +1,6 @@
 body{
     font-family: 'PT Sans', sans-serif;
+    background-color: #ddd4bc;
 }
 
 #worldmap{
@@ -21,6 +22,44 @@ body{
     shape-rendering: crispEdges;
 }
 
+.jumbotron{
+    text-align: center;
+    background: url('../img/jumbotron.jpg') 100%;
+    background-position: center;
+    background-size: cover;
+    min-height: 1000px;
+}
+
+.intro{
+    margin-top: 200px;
+}
+
+#name {
+    font-size: 200%;
+}
+.navbar-default .navbar-nav > li > a {
+  color: white;
+  font-size: 150%;
+}
+
+
+tbody, thead{
+    background-color: #ABDDA4;
+}
+
+#table {
+    margin-top: -25px;
+}
+
+.navbar-inverse {
+    background-color: black;
+
+}
+
+#airline_ranking_wrapper {
+    outline: 1px solid black;
+
+}
 tr::before{
 	display: none !important;
 }

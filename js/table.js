@@ -18,17 +18,21 @@ Table.prototype.initVis = function(){
 
 
   function draw(data){
-    var table = d3.select("body").append("table"),
+    var table = d3.select("#table").append("table"),
         thead = table.append("thead")
                      .attr("class", "thead");
+
         tbody = table.append("tbody");
 
-        table.attr("class", "table table-striped table-bordered");
+        table.attr("class", "table table-hover table-bordered table-condensed");
+        table.attr("data-search", "true")
         table.attr("id", "airline_ranking")
         table.attr("cellspacing", "0");
-        table.attr("width", "100%");
-        table.append("caption")
-          .html("Airline Ranking");
+        table.attr("width", "80%");
+
+
+        d3.select("caption").style("color", "black")
+        
 
         thead.append("tr").selectAll("th")
           .data(titles)
@@ -50,13 +54,18 @@ Table.prototype.initVis = function(){
           })
           .enter()
           .append("td")
+          .attr("class", "cell")
           .text(function(d) { return d; }); 
 
     }
 
     draw(that.data)
 
-    $('#airline_ranking').dataTable();
+    $('#airline_ranking').dataTable({
+        "scrollY":        "400px",
+        "scrollCollapse": true,
+        "paging":         false
+    });
 
 
     //FILTER FUNCTION: filter data that has continent = name
@@ -75,6 +84,8 @@ Table.prototype.initVis = function(){
             {
               var name = d3.select(this).attr("name");
               var new_data = getData(that.data, name)
+              console.log(that.data)
+              console.log(new_data)
               d3.select("table").remove()
               draw(new_data)
             })       
