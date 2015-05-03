@@ -182,7 +182,7 @@
                  var table = new Table(d3.select("table"), airlineRouteCounts, MyEventHandler);
 
                 var worldmap = new WorldMap(d3.select("#worldmap"), citiesToCities, metaDataCities, countriesToCountries, MyEventHandler);
-                // var linechart = new LineChart(d3.select("#linechart"), countryList, UNData, MyEventHandler);
+                var linechart = new LineChart(d3.select("#linechart"), UNData, MyEventHandler);
                 
                 $(MyEventHandler).bind("selectionChanged", function(event, args){
 
@@ -417,21 +417,20 @@
                     _countryList.map(function(d){
                         countryList[d["name"]] = d["continent"];
                     });
-                    console.log(countryList);
 
                     UNData = Object.keys(_UNData).map(function(d){
                         return {
-                            name: d.capitalizeFirstLetter(),
-                            continent: (countryList[d.capitalizeFirstLetter()]) ? countryList["d"] : "Unknown",
+                            name: d.toTitleCase(),
+                            continent: (countryList[d.toTitleCase()]) ? countryList[d.toTitleCase()] : "Unknown",
                             data: _UNData[d]
                         }
                     });
-                    UNData.map(function(d){
-                        if (d.continent == "Unknown"){
-                            console.log(d);
-                        }
-                    })
-
+                    // console unknowns
+                    // UNData.map(function(d){
+                    //     if (d.continent != "Unknown"){
+                    //         console.log(d);
+                    //     }
+                    // })
 
                     initVis();
                 }
