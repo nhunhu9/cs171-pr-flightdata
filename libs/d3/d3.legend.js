@@ -3,7 +3,11 @@
 // MIT licence
 
 (function() {
-d3.legend = function(g) {
+d3.legend = function(g, spacing) {
+
+  if (!spacing)
+    spacing = 120;
+
   g.each(function() {
     var g= d3.select(this),
         items = {},
@@ -14,6 +18,7 @@ d3.legend = function(g) {
 
     lb.enter().append("rect").classed("legend-box",true)
     li.enter().append("g").classed("legend-items",true)
+
 
     svg.selectAll("[data-legend]").each(function() {
         var self = d3.select(this)
@@ -31,7 +36,8 @@ d3.legend = function(g) {
         .call(function(d) { d.enter().append("text")})
         .call(function(d) { d.exit().remove()})
         .attr("y","4")
-        .attr("x",function(d,i) { return ((120*i)+15)+"px"})
+        .attr("x",function(d,i) { 
+            return ((spacing*i)+15)+"px"})
         .text(function(d) { ;return d.key})
     
     li.selectAll("circle")
@@ -39,7 +45,7 @@ d3.legend = function(g) {
         .call(function(d) { d.enter().append("circle")})
         .call(function(d) { d.exit().remove()})
         .attr("cy",0)
-        .attr("cx",function(d,i) { return (120*i)+"px"})
+        .attr("cx",function(d,i) { return (spacing*i)+"px"})
         .attr("r","0.4em")
         .style("fill",function(d) { console.log(d.value.color);return d.value.color})  
     
