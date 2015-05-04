@@ -9,8 +9,7 @@ WorldMap = function(_parentElement, _data, _metaData, _countriesToCountries, _ev
   this.eventHandler = _eventHandler;
   this.displayData = [];
 
-
-  this.selectableCountries = ["USA", "DEU", "JPN"];
+  this.selectableCountries = ["Americas",  "Africa",  "Asia",  "Europe",  "Oceania","USA", "DEU", "JPN", "VNM"];
 
   this.initVis();
 }
@@ -132,7 +131,6 @@ WorldMap.prototype.initVis = function(){
   this.addBackToWorldButton(this.parentElement);
 
 // Setup Continent Filters
-
 
   d3.selectAll(".continent_filter").on("change", function() { 
     if (this.checked)
