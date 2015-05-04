@@ -823,42 +823,42 @@
       return null;
   }
 
-  /*Africa: <rect x="440" width="217.75" y="368" height="230" style="fill:#000; opacity:50%"></rect>
-<rect x="810" width="140" y="512" height="110" style="fill:#000;opacity:50%"></rect>
-<rect x="430" width="183" y="190" height="190" style="fill:#000;opacity:50%"></rect>
-<rect x="30" width="440" y="20" height="650" style="fill:#000;opacity:50%"></rect> 
-<rect x="575" width="420" y="73" height="445" style="fill:#000;opacity:50%"></rect>*/
+  /*Africa: <rect x="360" width="160" y="322" height="175" style="fill:#000; opacity:50%"></rect>
+<rect x="650" width="105" y="415" height="110" style="fill:#000;opacity:50%"></rect>
+<rect x="345" width="145" y="185" height="143" style="fill:#000;opacity:50%"></rect>
+<rect x="24" width="350" y="40" height="530" style="fill:#000;opacity:50%"></rect>
+<rect x="465" width="335" y="84" height="355" style="fill:#000;opacity:50%"></rect>*/
 
   Datamap.prototype.continentBounds = {
     "Africa": {
-      x: 440,
-      width: 217.75,
-      y: 368,
-      height: 230
+      x: 360,
+      width: 160,
+      y: 322,
+      height: 175
     },
     "Oceania": {
-      x: 810,
-      width: 140,
-      y: 512,
+      x: 650,
+      width: 105,
+      y: 415,
       height: 110
     },
     "Europe": {
-      x: 430,
-      width: 183,
-      y: 205,
-      height: 170
+      x: 345,
+      width: 145,
+      y: 185,
+      height: 143
     },
     "Americas": {
-      x: 30,
-      width: 440,
-      y: 20,
-      height: 650
+      x: 24,
+      width: 350,
+      y: 40,
+      height: 530
     },
     "Asia": {
-      x: 575,
-      width: 420,
-      y: 73,
-      height: 445
+      x: 465,
+      width: 335,
+      y: 90,
+      height: 335
     }
   }
 

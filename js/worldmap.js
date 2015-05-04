@@ -142,7 +142,7 @@ WorldMap.prototype.initVis = function(){
 // Setup Continent Filters
 
   d3.selectAll(".continent_filter").on("click", function() { 
-    debugger;
+
       if (!that.args || that.args.level != "country")
         that.map.zoomContinent(this.name);
   });
@@ -168,7 +168,7 @@ if (this.args == null || this.args.level == null)
  else if (this.args.level == "continent")
       var level_filter = function (d) { return d.destination.continent == that.args.subitemClicked.id && d.origin.continent == that.args.subitemClicked.id ;}
   else if (this.args.level == "country")
-      var level_filter = function (d) { debugger; return d.destination.country == that.args.subitemClicked.properties.name && d.origin.country == that.args.subitemClicked.properties.name;}  
+      var level_filter = function (d) { return d.destination.country == that.args.subitemClicked.properties.name && d.origin.country == that.args.subitemClicked.properties.name;}  
 
   
 
