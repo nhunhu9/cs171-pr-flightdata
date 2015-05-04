@@ -21,12 +21,11 @@ Click Route Visualiation title to get projection values and add to projection pa
 Repeat last step if necessary
 
 
-
-
 countriesToCountries.filter(function(d) { return d.origin.country == d.destination.country}).sort(function(a,b) { return b.number_of_routes - a.number_of_routes; });
 countriesToCountries.filter(function(d) { return d.origin.country == "China" && d.destination.country != "China"}).sort(function(a,b) { return b.number_of_routes - a.number_of_routes; })
 
 ——
+Installation Steps:
 
 brew install gdal
 
