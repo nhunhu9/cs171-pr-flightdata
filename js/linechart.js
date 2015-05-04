@@ -48,12 +48,13 @@ LineChart.prototype.initVis = function(){
 }
 
 
-LineChart.prototype.wrangleData= function(_filterFunction){
-    var tmp = this.filterAndAggregate("Japan"); 
+LineChart.prototype.wrangleData= function(_ranges){
+
+    var tmp = this.filterAndAggregate(_ranges); 
     console.log(tmp);
     var that = this;
 
-    this.displayData = tmp.map(function(d){
+    var res = tmp.map(function(d){
         return {
           name: d["name"],
           continent: d["continent"],
@@ -80,25 +81,33 @@ LineChart.prototype.wrangleData= function(_filterFunction){
           ]
         }
     });
+    this.displayData = res.sort(function (a,b){
+      console.log(parseInt(a["data"][5]["value"]));
+      return d3.descending (parseInt(a["data"][5]["value"]), parseInt(b["data"][5]["value"]));
+    })
+
     console.log(that.displayData);
 }
 
-LineChart.prototype.filterAndAggregate = function(_filter){
+LineChart.prototype.filterAndAggregate = function(ranges){
 
-    var filter = _filter || function(){return false;}
-
-    var that = this;
-
-    var filteredData =  this.data.filter(function(d) {
-      return d["name"] == filter;
-    });
-    console.log(filteredData[0]["data"]["Arrivals"]);
-    return filteredData;
+    if(ranges == null) {
+      return this.data;
+    } else if(ranges["level"] == "world"){
+      return this.data;
+    } else if (ranges["level"] == "country") {
+      return this.data.filter(function(d){
+        return d["name"] == ranges["subitemClicked"]["properties"]["name"];
+      });
+    } else if (ranges["leve"] == "continent") {
+      return this.data.filter(function(d){
+        return d["continent"] == ranges["subitemClicked"]["id"];
+      });
+    }
 }
 
 LineChart.prototype.updateVis = function(){
   var that = this;
-  debugger;
 
   var max = d3.max(that.displayData[0]["data"], function(d){return d["value"]})
   var min = d3.min(that.displayData[0]["data"], function(d){return d["value"]})
@@ -111,10 +120,9 @@ LineChart.prototype.updateVis = function(){
         .call(this.yAxis)
 
   for (i = 0; i < 5; i++){
-
     this.line = d3.svg.line()
     .x(function(d) { return that.xScale(parseInt(d["year"])); })
-    .y(function(d) { debugger; return that.yScale(parseInt(d["value"])); })
+    .y(function(d) { return that.yScale(parseInt(d["value"])); })
     .interpolate("monotone");;
     console.log(that.displayData[0]["data"])
     this.svg.append("path")
@@ -129,4 +137,8 @@ LineChart.prototype.updateVis = function(){
 
 
 LineChart.prototype.onSelectionChange= function (ranges){
+  console.log(ranges);
+  if(ranges["level"]=="country"){
+    console.log(ranges["subitemClicked"]["properties"]["name"]);
+  } 
 }

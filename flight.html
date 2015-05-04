@@ -186,9 +186,9 @@
                 var linechart = new LineChart(d3.select("#linechart"), UNData, MyEventHandler);
                 
                 $(MyEventHandler).bind("selectionChanged", function(event, args){
-
                     console.log(args);
                     barchart2.onSelectionChange(args);
+                    linechart.onSelectionChange(args);
         
                   });
 
