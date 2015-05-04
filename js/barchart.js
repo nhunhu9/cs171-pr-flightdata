@@ -96,11 +96,14 @@ BarChart.prototype.wrangleData= function(_filterFunction, _value, _label, _title
 
   this.title = _title;
 
+  this.colorScale = d3.scale.category10()
+  this.colorScale.domain(["Americas", "Africa",  "Asia",  "Europe",  "Oceania"]);
+
   this.displayData = this.filterAndAggregate(_filterFunction, _value).map(function (d) {
       return {
           label: _label(d),
           value: _value(d),
-          //color: colorScale(d), write function to get continent
+          color: that.colorScale(d.continent)
       };
 
   });
@@ -134,10 +137,8 @@ BarChart.prototype.updateVis = function(init){
       this.offset = 20;
   
       this.xScale = d3.scale.linear().range([0, width]);
-      var colorScale = d3.scale.category10();
 
       this.xScale.domain([this.min, this.max]);
-      colorScale.domain([this.min, this.max]);
       
       this.bar_height = 10 
       
@@ -153,7 +154,7 @@ BarChart.prototype.updateVis = function(init){
                   .attr("x", 3)
                   .attr("y", 0)
         .attr("fill", function(d) { 
-          return colorScale(d[selectedColumn]); }); 
+          return d.color }); 
 
       labels = groups_new.append("text")
         .attr("x", 0)
@@ -181,7 +182,7 @@ BarChart.prototype.updateVis = function(init){
         .attr("width", function(d) { 
           return that.xScale(d[selectedColumn]); })
         .attr("fill", function(d) { 
-          return colorScale(d[selectedColumn]); }); 
+          return d.color }); 
   
       groups.select("text.labels")
         .text(function(d) { return d.label; });    
