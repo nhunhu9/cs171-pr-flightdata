@@ -71,8 +71,8 @@ BarChart.prototype.initVis = function(){
   };
 
   this.margin = margin;
-  this.width = width = 400 - margin.left - margin.right;
-  this.height = height = 200 - margin.top - margin.bottom;
+  this.width = width = 450 - margin.left - margin.right;
+  this.height = height = 115 - margin.top - margin.bottom;
 
 
 
@@ -120,7 +120,7 @@ BarChart.prototype.filterAndAggregate = function(_filter, _value){
     return _filter(d);
   })
   .sort(function(a,b) {return _value(b)-_value(a); })
-  .slice(0,10)
+  .slice(0,5)
 
 }
 
@@ -231,7 +231,7 @@ BarChart.prototype.onSelectionChange= function (args, init){
       function(d) { return true; }, 
       function(d) { return d.number_of_routes; },
       function(d) { return d.most_active_airport.name + " (" + that.country_codes[d.country] + ")"; },
-      "Top 10 airports by number of routes (Worldwide)"
+      "Top 5 airports by number of routes (Worldwide)"
     );
   
     this.updateVis();
@@ -242,7 +242,7 @@ BarChart.prototype.onSelectionChange= function (args, init){
       function(d) { return d.country ==  country}, 
       function(d) { return d.number_of_routes; },
       function(d) { return d.most_active_airport.name;},
-      "Top 10 airports by number of routes ("  + country + ")"
+      "Top 5 airports by number of routes ("  + country + ")"
     );
 
     this.updateVis();
@@ -253,7 +253,7 @@ BarChart.prototype.onSelectionChange= function (args, init){
       function(d) { return d.continent ==  continent}, 
       function(d) { return d.number_of_routes; },
       function(d) { return d.most_active_airport.name + " (" + that.country_codes[d.country] + ")"; },
-      "Top 10 airports by number of routes ("  + continent + ")"
+      "Top 5 airports by number of routes ("  + continent + ")"
     );
   
     this.updateVis();
