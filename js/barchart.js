@@ -15,12 +15,43 @@ BarChart = function(_parentElement, _data, _eventHandler){
   this.country_codes = {
     "United Kingdom": "UK",
     "United States": "US",
+    "Canada": "CA",
+
     "France": "FR",
     "Russia": "RU",
     "China": "CN",
     "Germany": "DE",
     "Netherlands": "NL",
-    "Spain": "ES" 
+    "Spain": "ES",
+    "Belgium": "BE",
+    "Austria": "AT",
+    "Italy": "IT",
+
+
+    "South Africa": "ZA",
+    "Kenya": "KE",
+    "Egypt": "EG",
+    "Morocco": "MA",
+    "Ethiopia": "ET",
+    "Algeria": "DZ",
+    "Tunisia": "TN",
+    "Cameroon": "CM",
+
+    "Japan": "JP",
+    "Turkey": "TR",
+    "Singapore": "SG",
+    "Hong Kong": "HK",
+    "United Arab Emirates": "AE",
+    "India": "IN",
+    "Thailand": "TH",
+
+    "Australia": "AU",
+    "New Zealand": "NZ",
+    "Fiji": "FJ"
+
+
+
+
   }
 
 
@@ -73,6 +104,8 @@ BarChart.prototype.wrangleData= function(_filterFunction, _value, _label, _title
       };
 
   });
+
+  console.log(this.displayData);
 
 }
 
@@ -204,7 +237,7 @@ BarChart.prototype.onSelectionChange= function (args, init){
    this.wrangleData(
       function(d) { return d.continent ==  continent}, 
       function(d) { return d.number_of_routes; },
-            function(d) { return d.most_active_airport.name + " (" + d.country + ")"; },
+      function(d) { return d.most_active_airport.name + " (" + that.country_codes[d.country] + ")"; },
       "Top 10 airports by number of routes ("  + continent + ")"
     );
   
