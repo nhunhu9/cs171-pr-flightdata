@@ -4,11 +4,11 @@ Table = function(_parentElement, _data,_eventHandler){
   this.data = _data;
   this.eventHandler = _eventHandler;
   this.displayData = [];
-  this.initVis();
+  draw(this.data)
 }
 
 
-Table.prototype.initVis = function(){
+
 
   var that = this; 
 
@@ -67,38 +67,6 @@ Table.prototype.initVis = function(){
 
     }
 
-    draw(that.data)
-
-    
-
-    //FILTER FUNCTION: filter data that has continent = name
-    function getData(data, name) {
-          return that.data.filter(function(d){
-            return d["continent"] == name;
-          });
-    }
-
-
-
-    d3.selectAll("button").each(function(d) 
-        { 
-          if(d3.select(this).attr("type") == "button") 
-          {
-            d3.selectAll(".continent_filter").on("click", function() 
-            {
-              var name = d3.select(this).attr("name");
-              var new_data = getData(that.data, name)
-              console.log(that.data)
-              console.log(new_data)
-              d3.select("#airline_ranking_wrapper").remove()
-              draw(new_data)
-            })       
-          }//END FILTER 
-        })
-
-
-  this.updateVis();
-}
 
 
 
@@ -108,8 +76,23 @@ Table.prototype.updateVis = function(){
   
 }
 
+//FILTER FUNCTION: filter data that has continent = name
+function getData(data, name) {
+          return data.filter(function(d){
+            return d["continent"] == name;
+          });
+}
 
 Table.prototype.onSelectionChange= function (ranges){
+  var name = ranges["subitemClicked"].id;
+  console.log(name)
+  var new_data = getData(this.data, name)
+  console.log(this.data)
+  console.log(new_data)
+  d3.select("#airline_ranking_wrapper").remove()
+  draw(new_data)
+
+
 }
 
 
