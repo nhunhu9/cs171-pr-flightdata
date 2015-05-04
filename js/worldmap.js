@@ -10,7 +10,7 @@ WorldMap = function(_parentElement, _data, _metaData, _countriesToCountries, _ev
   this.displayData = [];
 
 
-  this.selectableCountries = ["USA", "DEU", "JPN"];
+  this.selectableCountries = ["USA", "DEU", "JPN", "VNM"];
 
   this.initVis();
 }
