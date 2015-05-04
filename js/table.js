@@ -27,11 +27,11 @@ Table = function(_parentElement, _data,_eventHandler){
 
         tbody = table.append("tbody");
 
-        table.attr("class", "table table-hover table-bordered table-condensed");
+        table.attr("class", "table table-hover table-bordered");
         table.attr("data-search", "true")
         table.attr("id", "airline_ranking")
         table.attr("cellspacing", "0");
-        table.attr("width", "80%");
+        table.attr("width", "100%");
 
 
         d3.select("caption").style("color", "black")
@@ -62,7 +62,7 @@ Table = function(_parentElement, _data,_eventHandler){
           .text(function(d) { return d; }); 
 
           $('#airline_ranking').dataTable({
-              "order": [[ 2, "desc" ]]
+              "order": [[ 2, "desc" ]],
             });
 
 
