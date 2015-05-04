@@ -20,6 +20,7 @@ body{
 .jumbotron{
     text-align: center;
     background: url('../img/jumbotron.jpg') 100%;
+    height: 100%;
     background-position: center;
     background-size: cover;
     min-height: 1000px;
