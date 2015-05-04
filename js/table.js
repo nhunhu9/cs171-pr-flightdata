@@ -47,7 +47,8 @@ Table = function(_parentElement, _data,_eventHandler){
         var rows = tbody.selectAll("tr.row")
           .data(data)
           .enter()
-          .append("tr").attr("class", "row");
+          .append("tr")
+          .attr("class", "row");
 
         var cells = rows.selectAll("td")
           .data(function(row) {
@@ -61,7 +62,7 @@ Table = function(_parentElement, _data,_eventHandler){
           .text(function(d) { return d; }); 
 
           $('#airline_ranking').dataTable({
-        
+              "order": [[ 2, "desc" ]]
             });
 
 
@@ -77,20 +78,30 @@ Table.prototype.updateVis = function(){
 }
 
 //FILTER FUNCTION: filter data that has continent = name
-function getData(data, name) {
+function getData(data, name, key) {
           return data.filter(function(d){
-            return d["continent"] == name;
+            return d[key] == name;
           });
 }
 
 Table.prototype.onSelectionChange= function (ranges){
-  var name = ranges["subitemClicked"].id;
-  console.log(name)
-  var new_data = getData(this.data, name)
-  console.log(this.data)
-  console.log(new_data)
-  d3.select("#airline_ranking_wrapper").remove()
-  draw(new_data)
+  if(ranges.level == "country")
+  {
+    var name = ranges["subitemClicked"]["properties"].name;
+    key = "country"
+    var new_data = getData(this.data, name, key)
+    d3.select("#airline_ranking_wrapper").remove()
+    draw(new_data)
+  }
+  else
+  {
+    var name = ranges["subitemClicked"].id;
+    key = "continent"
+    var new_data = getData(this.data, name, key)
+    d3.select("#airline_ranking_wrapper").remove()
+    draw(new_data)
+  }
+  
 
 
 }
