@@ -40,7 +40,11 @@ body{
 
 #table {
     margin-top: -25px;
+
     margin-right: 20px;
+
+    width: 800px;
+
 }
 
 .navbar-inverse {
@@ -201,4 +205,16 @@ margin-bottom: 50px;
 
 #airline_ranking_filter > label > input {
     margin-left: 5px;
+}
+
+#barchart2 > .heading {
+    width: 550px;
+}
+
+#airline_ranking_filter > label {
+     margin-left: 10px;
+}
+
+#addBackToWorldButton {
+    margin-right: 3px;
 }
