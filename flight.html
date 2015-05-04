@@ -121,9 +121,10 @@
                 var linechart = new LineChart(d3.select("#linechart"), UNData, MyEventHandler);
                 
                 $(MyEventHandler).bind("selectionChanged", function(event, args){
-                    console.log(args);
+                    console.log(args["subitemClicked"].id);
                     barchart2.onSelectionChange(args);
                     linechart.onSelectionChange(args);
+                    table.onSelectionChange(args);
 
                     worldmap.args = args;
         
@@ -219,6 +220,7 @@
                     //DATA FOR THE TABLE
                     var i = 0
                     prev = ""
+
                     _completeTable.forEach(function(d){
                         if (completeData.length == 0 || prev != d["airline name"])
                         {
@@ -239,9 +241,11 @@
                         }
                     })
 
+
                     completeData.sort(function(a,b){
                         return d3.descending(a.count, b.count)
                     })
+
                     //END DATA FOR TABLE
 
                 
@@ -278,6 +282,7 @@
                 }
             }
 			
+
 			
 			// HELPERS 
 
