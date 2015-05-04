@@ -801,6 +801,7 @@
   Datamap.prototype.zoomContinent = function(continent) {
     var self = this;
 
+    debugger;
     clickZoom.call(self, {type:"continent", "id": continent});
   }
 
