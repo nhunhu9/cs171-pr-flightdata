@@ -65,14 +65,14 @@ BarChart.prototype.initVis = function(){
   var that = this; 
 
   var margin = {
-      top: 10,
-      right: 120,
-      bottom: 10,
-      left: 120*1.4+3
+      top: 5,
+      right: 55,
+      bottom: 15,
+      left: 120*1.4+8
   };
 
   this.margin = margin;
-  this.width = width = 450 - margin.left - margin.right;
+  this.width = width = 500 - margin.left - margin.right;
   this.height = height = 150 - margin.top - margin.bottom;
 
    this.titleElement = d3.select("#barchart2").insert("h3")
