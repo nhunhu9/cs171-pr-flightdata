@@ -109,7 +109,7 @@
 
             var citiesToCities = [];
             var metaDataCities = {};
-            var completeData = [];
+            var completeTable = [];
             var airlineRouteCounts = [];
             var domesticCitiyConnectionsCountByCountry = [];
             var countriesToCountries = [];
@@ -125,7 +125,7 @@
                 var barchart2 = new BarChart(d3.select("#barchart2"), metaDataCities, MyEventHandler);  
                  var table = new Table(d3.select("table"), airlineRouteCounts, MyEventHandler);
 
-                var worldmap = new WorldMap(d3.select("#worldmap"), citiesToCities, metaDataCities, countriesToCountries, MyEventHandler);
+                var worldmap = new WorldMap(d3.select("#worldmap"), citiesToCities, metaDataCities, countriesToCountries, completeTable, MyEventHandler);
                 var linechart = new LineChart(d3.select("#linechart"), UNData, MyEventHandler);
                 
                 $(MyEventHandler).bind("selectionChanged", function(event, args){
@@ -135,6 +135,12 @@
         
                   });
 
+                //  Link airline ranking with map
+                d3.selectAll("tr.row").on("click", function(d) {
+                    debugger;
+                    worldmap.showAirlineRoutes(d3.select(this.children[0]).text())
+                })  
+
             }
 
             var dataLoaded = function (error, _citiesToCities, _metaDataCities, _completeTable, _airlineRouteCounts, _countriesToCountries, _countryList, _UNData) {
@@ -142,6 +148,24 @@
                 if (!error) {
 
                     citiesToCities = _citiesToCities;
+
+                     completeTable = _completeTable.map(function (d) {
+            
+                            return {
+                                origin: {
+                                    country: d["departure country"],
+                                    longitude: parseFloat(d["long. departure (decimal)"]),
+                                    latitude: parseFloat(d["lat. departure (decimal)"]),
+                                },
+                                destination: {
+                                   country: d["arrival country"],
+                                    longitude: parseFloat(d["long. arrival (decimal)"]),
+                                    latitude: parseFloat(d["lat. arrival (decimal)"]),
+                                },
+
+                                airline_name: d["airline name"]
+                            } 
+                        });
                     
                     airlineRouteCounts = _airlineRouteCounts;
 
