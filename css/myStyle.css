@@ -125,12 +125,12 @@ width: 800px;
 
 .dataTables_filter{
   position: relative;
-  left: 90px;
+  left: 175px;
 }
 
 .dataTables_paginate{
   position: relative;
-  right: 170px;
+  right: 140px;
   margin-top: 20px;
 }
 
