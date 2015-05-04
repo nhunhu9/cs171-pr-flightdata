@@ -9,8 +9,8 @@ LineChart = function(_parentElement, _data, _eventHandler){
 
 
   this.margin = {top: 20, right: 20, bottom: 170, left: 60},
-  this.width =  650 - this.margin.left - this.margin.right,
-  this.height = 440 - this.margin.top - this.margin.bottom;
+  this.width =  500 - this.margin.left - this.margin.right,
+  this.height = 380 - this.margin.top - this.margin.bottom;
   console.log(_data);
   this.initVis();
 }
@@ -150,9 +150,9 @@ LineChart.prototype.updateVis = function(){
 
   legend = this.svg.append("g")
     .attr("class","legend")
-    .attr("transform","translate(25,290)")
+    .attr("transform","translate(-25,230)")
     .style("font-size","12px")
-    .call(d3.legend)
+    .call(d3.legend,97)
 }
 
 

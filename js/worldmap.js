@@ -10,6 +10,8 @@ WorldMap = function(_parentElement, _data, _metaData, _countriesToCountries, _co
   this.eventHandler = _eventHandler;
   this.displayData = [];
 
+  this.args = null;
+
   this.selectableCountries = ["Americas",  "Africa",  "Asia",  "Europe",  "Oceania","USA", "DEU", "JPN", "VNM"];
 
   this.initVis();
@@ -151,8 +153,21 @@ WorldMap.prototype.wrangleData= function(_filterFunction, level){
   this.displayData = this.filterAndAggregate(_filterFunction, level);
 }
 
-WorldMap.prototype.showAirlineRoutes = function(airline_name ) {
-  this.displayData = this.completeTable.filter(function(d) { return d.airline_name == airline_name; })
+WorldMap.prototype.showAirlineRoutes = function(airline_name) {
+var that = this;
+
+ var level_filter = function (d) { return true;}
+
+if (this.args == null || this.args.level == null)
+      var level_filter = function (d) { return true;}
+ else if (this.args.level == "continent")
+      var level_filter = function (d) { return d.destination.continent == that.args.subitemClicked.id && d.origin.continent == that.args.subitemClicked.id ;}
+  else if (this.args.level == "country")
+      var level_filter = function (d) { debugger; return d.destination.country == that.args.subitemClicked.properties.name && d.origin.country == that.args.subitemClicked.properties.name;}  
+
+  
+
+  this.displayData = this.completeTable.filter(function(d) { return d.airline_name == airline_name; }).filter(level_filter);
   this.updateVis();
 }
 

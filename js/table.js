@@ -17,7 +17,11 @@ Table.prototype.initVis = function(){
 
 
   function draw(data){
-    var table = d3.select("#table").append("table"),
+    var container = d3.select("#table").append("div")
+                          .attr("class", "contain");
+    var table = d3.select(".contain").append("table"),
+
+
         thead = table.append("thead")
                      .attr("class", "thead");
 
