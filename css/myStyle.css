@@ -89,7 +89,10 @@ margin-left: 40px;
 }
 
 .line {
-outline: 1px solid black;
+border-style: solid black;
+border-width: 1px;
+border-radius: 5px;
+box-shadow: 0 0 5px 2px rgba(0,0,0,.35);
 }
 
 #title {
