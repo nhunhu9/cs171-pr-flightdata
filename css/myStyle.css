@@ -193,3 +193,7 @@ width: 800px;
 #airline_ranking_filter > label {
      margin-left: 10px;
 }
+
+#addBackToWorldButton {
+    margin-right: 3px;
+}
