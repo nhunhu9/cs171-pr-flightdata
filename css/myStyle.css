@@ -3,11 +3,6 @@ body{
     background-color: #f4f4f2;
 }
 
-#worldmap{
-	position: relative;
-	width: 1000px; height: 700px;
-}
-
 .axis text {
     font: 10px sans-serif;
 }
@@ -105,8 +100,8 @@ margin-top: 80px;
 #worldmap {
 margin-left: 20px;
 margin-right: 20px;
-height: 500px;
-width: 700px;
+height: 600px;
+width: 800px;
 }
 
 
