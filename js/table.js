@@ -93,7 +93,7 @@ Table.prototype.onSelectionChange= function (ranges){
     d3.select("#airline_ranking_wrapper").remove()
     draw(new_data)
   }
-  else
+  if(ranges.level == "continent")
   {
     var name = ranges["subitemClicked"].id;
     key = "continent"

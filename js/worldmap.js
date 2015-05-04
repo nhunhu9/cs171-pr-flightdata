@@ -72,8 +72,11 @@ WorldMap.prototype.initVis = function(){
     },
     subunitClick: function(g) {
       that.wrangleData(null);
-      d3.select(".btn-group").disabled = true;
-      d3.select(".btn-group").style("opacity", "0.5");
+      if(g.type == "Feature")
+      {
+        d3.select(".btn-group").disabled = true;
+        d3.select(".btn-group").style("opacity", "0.5");
+      }
       that.updateVis();               
     }, 
     subunitClicked: function(g) {
