@@ -21,8 +21,6 @@ Click Route Visualiation title to get projection values and add to projection pa
 Repeat last step if necessary
 
 
-<<<<<<< HEAD
-=======
 
 topojson --id-property adm1_code -p name=NAME -p name -o VNM.topo.json VNM.json
 

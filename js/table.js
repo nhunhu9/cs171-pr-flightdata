@@ -4,7 +4,6 @@ Table = function(_parentElement, _data,_eventHandler){
   this.data = _data;
   this.eventHandler = _eventHandler;
   this.displayData = [];
-
   this.initVis();
 }
 
@@ -57,14 +56,16 @@ Table.prototype.initVis = function(){
           .attr("class", "cell")
           .text(function(d) { return d; }); 
 
+          $('#airline_ranking').dataTable({
+        
+            });
+
+
     }
 
     draw(that.data)
 
-    $('#airline_ranking').dataTable({
-        
-    });
-
+    
 
     //FILTER FUNCTION: filter data that has continent = name
     function getData(data, name) {
@@ -73,18 +74,19 @@ Table.prototype.initVis = function(){
           });
     }
 
-    d3.selectAll("input").each(function(d) 
+
+
+    d3.selectAll("button").each(function(d) 
         { 
-          //FILTER
-          if(d3.select(this).attr("type") == "checkbox") 
+          if(d3.select(this).attr("type") == "button") 
           {
-            d3.selectAll("input").on("change", function() 
+            d3.selectAll(".continent_filter").on("click", function() 
             {
               var name = d3.select(this).attr("name");
               var new_data = getData(that.data, name)
               console.log(that.data)
               console.log(new_data)
-              d3.select("table").remove()
+              d3.select("#airline_ranking_wrapper").remove()
               draw(new_data)
             })       
           }//END FILTER 
