@@ -194,6 +194,17 @@ WorldMap.prototype.filterAndAggregate = function(_filter, level){
       return filter(d);
     });
 
+
+   var level_filter = function (d) { return true;}
+
+  if (this.args == null || this.args.level == null)
+        var level_filter = function (d) { return true;}
+   else if (this.args.level == "continent")
+        var level_filter = function (d) { return d.destination.continent == that.args.subitemClicked.id && d.origin.continent == that.args.subitemClicked.id ;}
+    else if (this.args.level == "country")
+        var level_filter = function (d) { return d.destination.country == that.args.subitemClicked.properties.name && d.origin.country == that.args.subitemClicked.properties.name;}  
+
+    res = res.filter(level_filter);
     return res;
 
 }

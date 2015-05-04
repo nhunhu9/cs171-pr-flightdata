@@ -838,9 +838,9 @@
     },
     "Oceania": {
       x: 650,
-      width: 105,
+      width: 150,
       y: 415,
-      height: 110
+      height: 120
     },
     "Europe": {
       x: 345,

@@ -185,11 +185,13 @@
                             return {
                                 origin: {
                                     country: d["country departure"],
+                                    continent: (countryList[d["country departure"].toTitleCase()]) ? countryList[d["country departure"].toTitleCase()] : "Unknown",
                                     longitude: parseFloat(d["departure longitude"]),
                                     latitude: parseFloat(d["departure latitude"]),
                                 },
                                 destination: {
                                     country: d["country arrival"],
+                                    continent: (countryList[d["country arrival"].toTitleCase()]) ? countryList[d["country arrival"].toTitleCase()] : "Unknown",
                                     longitude: parseFloat(d["arrival longitude"]),
                                     latitude: parseFloat(d["arrival latitude"]),
                                 },

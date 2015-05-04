@@ -67,7 +67,7 @@ BarChart.prototype.initVis = function(){
       top: 10,
       right: 120,
       bottom: 10,
-      left: 120*1.4
+      left: 120*1.4+3
   };
 
   this.margin = margin;
