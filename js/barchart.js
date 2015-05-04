@@ -69,6 +69,8 @@ BarChart.prototype.initVis = function(){
       bottom: 10,
       left: 120*1.4
   };
+
+  this.margin = margin;
   this.width = width = 360 - margin.left - margin.right;
   this.height = height = 200 - margin.top - margin.bottom;
 
@@ -76,7 +78,7 @@ BarChart.prototype.initVis = function(){
 
   this.svg = this.parentElement.append("svg")
       .attr("width", width + margin.left + margin.right)
-      .attr("height", height + margin.top + margin.bottom)
+      .attr("height", height + margin.top + margin.bottom + 30)
       .append("g")
       .attr("transform", "translate(" + margin.left + "," + margin.top + ")");
 
@@ -103,7 +105,8 @@ BarChart.prototype.wrangleData= function(_filterFunction, _value, _label, _title
       return {
           label: _label(d),
           value: _value(d),
-          color: that.colorScale(d.continent)
+          continent: d.continent,
+          color: that.colorScale(d.continent),
       };
 
   });
@@ -168,9 +171,11 @@ BarChart.prototype.updateVis = function(init){
         .attr("dy", ".8em")
         .attr("class", "values")
 
+
     groups.exit().selectAll("*").remove();
     groups.exit().remove();
         
+
       
       //Update all
       groups
@@ -182,7 +187,8 @@ BarChart.prototype.updateVis = function(init){
         .attr("width", function(d) { 
           return that.xScale(d[selectedColumn]); })
         .attr("fill", function(d) { 
-          return d.color }); 
+          return d.color })
+       .attr("data-legend", function(d) { return d.continent; })  
   
       groups.select("text.labels")
         .text(function(d) { return d.label; });    
@@ -190,7 +196,15 @@ BarChart.prototype.updateVis = function(init){
       groups.select("text.values")
         .attr("x", function(d) { return that.xScale(d[selectedColumn]) + 6; })
         .text(function(d) { return d3.format(",")(d[selectedColumn]); }); 
-      
+
+
+         this.svg.selectAll(".legend").remove();
+
+       legend = this.svg.append("g")
+      .attr("class","legend")
+      .attr("transform", "translate(" + (-this.margin.left+20) + ","+(height+25)+")")
+      .style("font-size","12px")
+      .call(d3.legend, 80)
       
       if (!init) {
           groups.style("fill-opacity", 0)
