@@ -72,6 +72,8 @@ WorldMap.prototype.initVis = function(){
     },
     subunitClick: function(g) {
       that.wrangleData(null);
+      d3.select(".btn-group").disabled = true;
+      d3.select(".btn-group").style("opacity", "0.5");
       that.updateVis();               
     }, 
     subunitClicked: function(g) {
@@ -116,6 +118,7 @@ WorldMap.prototype.initVis = function(){
    subunitMouseover: function(g) {
         if (that.map.options.scope != "world")
             return;
+
 
         that.wrangleData(function(d) { return d.origin.country == g.properties.name 
                                         && d.origin.country != d.destination.country}, "country");
@@ -241,6 +244,8 @@ WorldMap.prototype.addBackToWorldButton = function(container){
       .attr("style", "display: none")
       .on("click", function() { 
         var button = d3.select(this);
+        d3.select(".btn-group").disabled = false;
+        d3.select(".btn-group").style("opacity", "1");
 
         that.map.svg.selectAll("g")
           .transition()
