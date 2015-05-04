@@ -13,12 +13,12 @@ body{
 }
 
 .axis line {
-	stroke-width: 0.2;
+	stroke-width: 1px;
 }
 .axis path {
     fill: none;
     stroke: #000;
-    stroke-width: 0.2;
+    stroke-width: 1px;
     shape-rendering: crispEdges;
 }
 

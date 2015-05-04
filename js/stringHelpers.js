@@ -14,6 +14,9 @@ String.prototype.toTitleCase = function() {
 //    	return _Array;
 // };
 
+String.prototype.removeComma = function() {
+    return(this.replace(/,/g,''));
+}
 
 function toArray(_Object){
        var _Array = new Array();
