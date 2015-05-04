@@ -149,8 +149,6 @@ WorldMap.prototype.initVis = function(){
  this.wrangleData(null);
 
   this.updateVis();
-
-  this.showAirlineRoutes("All Nippon Airways");
 }
 
 // level: default: city, alternative: country
