@@ -136,7 +136,7 @@
                   });
 
                 //  Link airline ranking with map
-                d3.selectAll("tr.row").on("click", function(d) {
+                $("#table").on("click","tr.row", function() {
                     debugger;
                     worldmap.showAirlineRoutes(d3.select(this.children[0]).text())
                 })  
