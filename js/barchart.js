@@ -47,7 +47,7 @@ BarChart = function(_parentElement, _data, _eventHandler){
 
     "Australia": "AU",
     "New Zealand": "NZ",
-    "Fiji": "FJ"
+    "Fiji": "FJ",
     "South Korea": "KR"
 
 
