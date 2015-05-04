@@ -142,7 +142,9 @@ WorldMap.prototype.initVis = function(){
 // Setup Continent Filters
 
   d3.selectAll(".continent_filter").on("click", function() { 
-      that.map.zoomContinent(this.name);
+    debugger;
+      if (!that.args || that.args.level != "country")
+        that.map.zoomContinent(this.name);
   });
 
 

@@ -139,7 +139,7 @@ width: 800px;
 
 .nav-title{
     margin: 15px 20px 15px 40px;
-    font-size: 30px;
+    font-size: 18px;
     width: 500px;
     display: inline;
     float: left;
@@ -149,14 +149,14 @@ width: 800px;
     margin: 15px 100px 15px 50px;
     display: inline;
     float: right;
-    font-size: 25px;
+    font-size: 18px;
     color: white !important;
 }
 .nav-links2{
     margin: 15px 0px 15px 50px;
     display: inline;
     float: right;
-    font-size: 25px;
+    font-size: 18px;
     color: white !important;
 }
 
