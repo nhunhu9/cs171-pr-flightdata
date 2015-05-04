@@ -71,7 +71,7 @@ BarChart.prototype.initVis = function(){
   };
 
   this.margin = margin;
-  this.width = width = 360 - margin.left - margin.right;
+  this.width = width = 400 - margin.left - margin.right;
   this.height = height = 200 - margin.top - margin.bottom;
 
 
