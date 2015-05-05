@@ -117,6 +117,9 @@ WorldMap.prototype.initVis = function(){
             that.updateVis();    
             that.map.options.done(that.map);
 
+            that.zoomBehavior.scale(1).translate([0, 0]);  
+            that.map.resetZoom(0); 
+
             $(that.eventHandler).trigger("selectionChanged", {level: "country", subitemClicked: g});
           });
       }
