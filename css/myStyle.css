@@ -60,6 +60,15 @@ tr::after{
 	display: none !important;
 }
 
+ table th.sorting_asc{
+    cursor: n-resize;
+  }
+
+table th.sorting_desc, th.sorting {
+    cursor: s-resize;
+}
+
+
 
 caption {
  font-weight: bold;
