@@ -2,12 +2,9 @@
 // (C) 2012 ziggy.jonsson.nyc@gmail.com
 // MIT licence
 
+
 (function() {
-d3.legend = function(g, spacing) {
-
-  if (!spacing)
-    spacing = 120;
-
+d3.verticallegend = function(g) {
   g.each(function() {
     var g= d3.select(this),
         items = {},
@@ -18,7 +15,6 @@ d3.legend = function(g, spacing) {
 
     lb.enter().append("rect").classed("legend-box",true)
     li.enter().append("g").classed("legend-items",true)
-
 
     svg.selectAll("[data-legend]").each(function() {
         var self = d3.select(this)
@@ -35,28 +31,28 @@ d3.legend = function(g, spacing) {
         .data(items,function(d) { return d.key})
         .call(function(d) { d.enter().append("text")})
         .call(function(d) { d.exit().remove()})
-        .attr("y","4")
-        .attr("x",function(d,i) { 
-            return ((spacing*i)+15)+"px"})
+        .attr("y",function(d,i) { return i+"em"})
+        .attr("x","1em")
         .text(function(d) { ;return d.key})
+        .style("font-size","10px")
     
     li.selectAll("circle")
         .data(items,function(d) { return d.key})
         .call(function(d) { d.enter().append("circle")})
         .call(function(d) { d.exit().remove()})
-        .attr("cy",0)
-        .attr("cx",function(d,i) { return (spacing*i)+"px"})
-        .attr("r","0.4em")
-        .style("fill",function(d) { return d.value.color})  
+        .attr("cy",function(d,i) { return (i*0.83)-0.25+"em"})
+        .attr("cx",0)
+        .attr("r","0.3em")
+        .style("fill",function(d) { console.log(d.value.color);return d.value.color})  
     
     // Reposition and resize the box
     var lbbox = li[0][0].getBBox()  
     lb.attr("x",(lbbox.x-legendPadding))
         .attr("y",(lbbox.y-legendPadding))
-        .style("fill", "white")
-        .style("opacity", "0.8")
         .attr("height",(lbbox.height+2*legendPadding))
         .attr("width",(lbbox.width+2*legendPadding))
+        .style("fill", "white")
+        .style("opacity", "0.8")
   })
   return g
 }
