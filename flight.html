@@ -124,7 +124,7 @@
             </div>
             <div id="story3" class="panel-collapse collapse">
               <div class="panel-body">
-                <p>Africa is home to the world's fastest-growing population; there are already 500 million mobile phones in Africa, with 850 million expected by 2015; Africa's workforce is expected to be the world's largest by 2035, bigger than both China's and India's; consumer spending is growing in Africa from around $900bn today to an anticipated $1.4 trillion by 2020. However, currently it lags far behind other more developed continents in terms of flight routes served or expenditure of foreign visitors in their country.</p>
+                <p>Africa is home to the world's fastest-growing population; Africa's workforce is expected to be the world's largest by 2035, bigger than both China's and India's; consumer spending is growing in Africa from around $900bn today to an anticipated $1.4 trillion by 2020. However, currently it lags far behind other more developed continents in terms of flight routes served or expenditure of foreign visitors in their country.</p>
               </div>
             </div>
           </div>       
@@ -197,11 +197,19 @@
                 $("#story3-title").on("click", function(){
                     if (!worldmap.args || worldmap.args.level == "world") {
                         worldmap.map.zoomContinent("Africa");
+                        setTimeout(function(){
+                                worldmap.wrangleData(function(d) { return d.origin.continent == "Africa"  && d.destination.continent == "Africa"}, "country");
+                                worldmap.updateVis();
+                            }, 2500);
                     }
                     else if(worldmap.args.level=="country" || worldmap.args.level=="continent") {
                         worldmap.backToWorldMap();
                         setTimeout(function(){
                             worldmap.map.zoomContinent("Africa");
+                            setTimeout(function(){
+                                worldmap.wrangleData(function(d) { return d.origin.continent == "Africa"  && d.destination.continent == "Africa"}, "country");
+                                worldmap.updateVis();
+                            }, 2000);
                         }, 1500);
                     }
                 });
