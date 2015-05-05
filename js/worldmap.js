@@ -403,7 +403,7 @@ WorldMap.prototype.backToWorldMap = function (){
 
 WorldMap.prototype.zoomCountry = function(d){
     var subitem = d3.selectAll('.datamaps-subunit')[0].filter(function(d){
-      return (d.__data__.id=="JPN")
+      return (d.__data__.id==d)
     })[0];
     debugger;
     this.map.publicZoom.call(this.map, subitem["__data__"]);

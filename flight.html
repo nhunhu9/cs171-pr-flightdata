@@ -95,20 +95,20 @@
          <div class="storypanel">
           <div class="panel panel-default">
             <div class="panel-heading">
-              <h4 class="panel-title">
-                    <a href="#story1" class="accordion-toggle" data-toggle="collapse" data-parent="#accordion"><span class="glyphicon glyphicon-plane"></span> Story 1 Title</a>
+              <h4  id="story1-title" class="panel-title">
+                    <a href="#story1" class="accordion-toggle" data-toggle="collapse" data-parent="#accordion"><span class="glyphicon glyphicon-plane"></span> East vs West, within China</a>
               </h4>
             </div>
                 <div id="story1" class="panel-collapse collapse">
               <div class="panel-body">
-                <p>Story 1</p>
+                <p></p>
               </div>
             </div>
           </div>     
                
           <div class="panel panel-default">
             <div class="panel-heading">
-              <h4 class="panel-title">
+              <h4 id="story2-title" class="panel-title">
                 <a href="#story2" class="accordion-toggle" data-toggle="collapse" data-parent="#accordion"><span class="glyphicon glyphicon-plane"></span> Story 2 Title</a>
               </h4>
             </div>
@@ -121,7 +121,7 @@
                
           <div class="panel panel-default">
             <div class="panel-heading">
-              <h4 class="panel-title">
+              <h4 id="story3-title" class="panel-title">
                 <a href="#story3" class="accordion-toggle" data-toggle="collapse" data-parent="#accordion"> <span class="glyphicon glyphicon-plane"></span> Story 3 Title</a>
               </h4>
             </div>
@@ -130,21 +130,7 @@
                 <p>Story 3</p>
               </div>
             </div>
-          </div>     
-               
-          <div class="panel panel-default">
-            <div class="panel-heading">
-              <h4 class="panel-title">
-                <a href="#story4" class="accordion-toggle" data-toggle="collapse" data-parent="#accordion"><span class="glyphicon glyphicon-plane"></span> Story 4 Title</a>
-              </h4>
-            </div>
-            <div id="story4" class="panel-collapse collapse">
-              <div class="panel-body">
-                <p>Story 4</p>
-              </div>
-            </div>
-          </div>
-          </div>    
+          </div>       
         </div><!-- end accordion --> 
     </div>
 
@@ -174,7 +160,7 @@
                 
              
                 var barchart2 = new BarChart(d3.select("#barchart2"), metaDataCities, MyEventHandler);  
-                 var table = new Table(d3.select("table"), completeData, MyEventHandler);
+                var table = new Table(d3.select("table"), completeData, MyEventHandler);
 
                 var worldmap = new WorldMap(d3.select("#worldmap"), citiesToCities, metaDataCities, countriesToCountries, completeTable, UNData, MyEventHandler);
                 var linechart = new LineChart(d3.select("#linechart"), UNData, MyEventHandler);
@@ -193,7 +179,19 @@
                 //  Link airline ranking with map
                 $("#table").on("click","tr.row", function() {
                     worldmap.showAirlineRoutes(d3.select(this.children[0]).text())
-                })  
+                });
+
+                $("#story1-title").on("click", function(){
+                    worldmap.zoomCountry("CHN");
+                });
+
+                $("#story2-title").on("click", function(){
+                    worldmap.showAirlineRoutes("United Airlines")
+                });
+
+                $("#story3-title").on("click", function(){
+                    worldmap.map.zoomContinent("Asia");
+                });
 
             }
 
