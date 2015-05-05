@@ -201,7 +201,7 @@ BarChart.prototype.updateVis = function(init){
         .text(function(d) { return d3.format(",")(d[selectedColumn]); }); 
 
 
-         this.svg.selectAll(".legend").remove();
+      this.svg.selectAll(".legend").remove();
 
        legend = this.svg.append("g")
       .attr("class","legend")

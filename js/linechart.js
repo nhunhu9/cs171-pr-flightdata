@@ -130,9 +130,22 @@ LineChart.prototype.updateVis = function(){
 
   this.svg.select(".x.axis")
         .call(this.xAxis)
+        .append("text")
+        .attr("x",433)
+        .attr("dy", "24")
+        .style("text-anchor", "end")
+        .text("Years");
 
   this.svg.select(".y.axis")
         .call(this.yAxis)
+        .append("text")
+        .attr("x",-5)
+        .attr("dy", "-45")
+        .attr("transform", function(d) {
+                return "rotate(-90)" 
+                })
+        .style("text-anchor", "end")
+        .text("Arrival passenger numbers (thousands)");
 
   for (i = 0; i < that.countries; i++){
     console.log(that.displayData[i]["data"])
