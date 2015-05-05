@@ -559,6 +559,11 @@
 
   }
 
+  
+ function clickZoom(d) {
+    var self = this,
+
+
 Datamap.prototype.publicZoom = function(d){
   return clickZoom(d, this);
 }
