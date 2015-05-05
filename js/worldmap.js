@@ -29,13 +29,13 @@ WorldMap.prototype.initVis = function(){
   } )
 
   this.arc_color_scale =  d3.scale.log()
-      .range(["red", "blue", "black"])
+      .range(["#99CCFF", "#3333CC", "#000080"])
       .domain(d3.extent(this.data, function(l) {
         return l.number_of_routes;
       }))
 
   this.arcWidthScale = d3.scale.log()
-    .range([0.4, 3.7]);
+    .range([0.4, 2]);
 
   this.arcOpacityScale = d3.scale.log()
     .range([0.01, 1.0]);
@@ -46,8 +46,8 @@ WorldMap.prototype.initVis = function(){
     element: document.getElementById("worldmap"),
     projection: "mercator",
     arcConfig: {
-      strokeColor: "darkblue",
-      strokeWidth: 0.3,
+      //strokeColor: "darkblue",
+      strokeWidth: 1,
       arcSharpness: 0.5,
       animationSpeed: 500
     },
@@ -220,8 +220,8 @@ WorldMap.prototype.updateVis = function(){
 
   this.displayData.forEach(function(d){
     d.options = {};
-   // d.options.strokeColor = that.arc_color_scale(d.number_of_routes);
-    //d.options.strokeWidth = that.arcWidthScale(d.number_of_routes);
+    d.options.strokeColor = that.arc_color_scale(d.number_of_routes);
+    d.options.strokeWidth = that.arcWidthScale(d.number_of_routes);
     d.options.greatArc = true;
   })
 
