@@ -560,8 +560,8 @@
   }
 
   
- function clickZoom(d) {
-    var self = this,
+ // function clickZoom(d) {
+ //    var self = this,
 
 
 Datamap.prototype.publicZoom = function(d){

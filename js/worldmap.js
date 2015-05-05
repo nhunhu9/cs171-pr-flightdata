@@ -405,9 +405,9 @@ WorldMap.prototype.backToWorldMap = function (){
 
 }
 
-WorldMap.prototype.zoomCountry = function(d){
+WorldMap.prototype.zoomCountry = function(sel){
     var subitem = d3.selectAll('.datamaps-subunit')[0].filter(function(d){
-      return (d.__data__.id==d)
+      return (d.__data__.id==sel)
     })[0];
     debugger;
     this.map.publicZoom.call(this.map, subitem["__data__"]);
