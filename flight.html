@@ -127,6 +127,20 @@
                 <p>Africa is home to the world's fastest-growing population; Africa's workforce is expected to be the world's largest by 2035, bigger than both China's and India's; consumer spending is growing in Africa from around $900bn today to an anticipated $1.4 trillion by 2020. However, currently it lags far behind other more developed continents in terms of flight routes served or expenditure of foreign visitors in their country.</p>
               </div>
             </div>
+          </div>  
+          <div class="panel panel-default">
+            <div class="panel-heading">
+              <h4 id="story4-title" class="panel-title">
+                <a href="#story4" class="accordion-toggle" data-toggle="collapse" data-parent="#accordion"> <span class="glyphicon glyphicon-plane"></span> Financial Crisis</a>
+              </h4>
+            </div>
+            <div id="story4" class="panel-collapse collapse">
+              <div class="panel-body">
+                <p>The airline industry had the worst demand decline ever in 2009, when the global crisis shook most economies. Passenger demand fell 3.5%, with an average load factor of 75.6%. Freight markets also saw a decline of 10.1%, with an average load factor of only 49.1%. The linechart shows how some of the countries with the most incoming passengers in the world experienced significant declines.
+                    <br>
+                    <a href="http://www.abs-cbnnews.com/business/01/28/10/2009-was-worst-year-aviation-industry-capa-report">Source</a></p>
+              </div>
+            </div>
           </div>       
         </div><!-- end accordion --> 
     </div>
@@ -198,7 +212,7 @@
                     if (!worldmap.args || worldmap.args.level == "world") {
                         worldmap.map.zoomContinent("Africa");
                         setTimeout(function(){
-                                worldmap.wrangleData(function(d) { return d.origin.continent == "Africa"  && d.destination.continent == "Africa"}, "country");
+                                worldmap.wrangleData(function(d) { return d.origin.continent == "Africa"  && d.destination.continent != "Africa"}, "country");
                                 worldmap.updateVis();
                             }, 2500);
                     }
@@ -207,12 +221,27 @@
                         setTimeout(function(){
                             worldmap.map.zoomContinent("Africa");
                             setTimeout(function(){
-                                worldmap.wrangleData(function(d) { return d.origin.continent == "Africa"  && d.destination.continent == "Africa"}, "country");
+                                worldmap.wrangleData(function(d) { return d.origin.continent == "Africa"  || d.destination.continent == "Africa"}, "country");
                                 worldmap.updateVis();
-                            }, 2000);
+                            }, 2500);
                         }, 1500);
                     }
                 });
+
+                $("#story4-title").on("click", function(){
+                    if (!worldmap.args || worldmap.args.level == "world") {
+                        linechart.wrangleData("story");
+                        linechart.updateVis();
+                    }
+                    else if(worldmap.args.level=="country" || worldmap.args.level=="continent") {
+                        worldmap.backToWorldMap();
+                        setTimeout(function(){
+                            linechart.wrangleData("story");
+                            linechart.updateVis();   
+                        }, 2200);
+                    }
+                });
+
 
             }
 
