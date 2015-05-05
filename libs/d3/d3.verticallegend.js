@@ -43,7 +43,7 @@ d3.verticallegend = function(g) {
         .attr("cy",function(d,i) { return (i*0.83)-0.25+"em"})
         .attr("cx",0)
         .attr("r","0.3em")
-        .style("fill",function(d) { console.log(d.value.color);return d.value.color})  
+        .style("fill",function(d) {return d.value.color})  
     
     // Reposition and resize the box
     var lbbox = li[0][0].getBBox()  

@@ -371,12 +371,6 @@ WorldMap.prototype.addBackToWorldButton = function(container){
 
 WorldMap.prototype.backToWorldMap = function (){
   var that = this;
-  that.map.svg.selectAll("g")
-          .transition()
-          .duration(750)
-          .style("opacity", 0)
-          .call(that.map.endAll, function () {
-            button.attr("style", "display: none");
 
             that.map.updateScope("world");
             that.zoomBehavior.scale(1).translate([0, 0]);  
@@ -401,7 +395,6 @@ WorldMap.prototype.backToWorldMap = function (){
 
                 $(that.eventHandler).trigger("selectionChanged", {level: "world" });
               });
-          });
 
 }
 

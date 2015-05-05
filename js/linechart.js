@@ -147,7 +147,6 @@ LineChart.prototype.updateVis = function(){
         .text("Arrival passenger numbers (thousands)");
 
   for (i = 0; i < that.countries; i++){
-    console.log(that.displayData[i]["data"])
     this.line = d3.svg.line()
     .x(function(d) { return that.xScale(parseInt(d["year"])); })
     .y(function(d) { return that.yScale(parseInt(d["value"])); })
