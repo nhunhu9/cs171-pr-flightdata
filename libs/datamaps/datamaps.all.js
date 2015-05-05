@@ -559,8 +559,15 @@
 
   }
 
- function clickZoom(d) {
-    var self = this,
+Datamap.prototype.publicZoom = function(d){
+  return clickZoom(d, this);
+}
+
+ function clickZoom(d, self) {
+    if(!self){
+      var self = this;
+    }
+    var 
         zoomFactor  = self.options.zoomConfig.zoomFactor,
         width   = self.options.element.clientWidth,
         height  = self.options.element.clientHeight,
@@ -569,7 +576,7 @@
     || isNaN(zoomFactor)
     || zoomFactor <= 0) return this.resetZoom();
 
-    if (this.parent.selectableCountries.indexOf(d.id) < 0) 
+    if (self.parent.selectableCountries.indexOf(d.id) < 0) 
       return;
 
       self.options.subunitClick(d);  
@@ -594,7 +601,7 @@
         y       = (bounds[0][1] + bounds[1][1]) / 2
 
     if (d.type == "continent") {
-      var bbox = this.continentBounds[d.id];
+      var bbox = self.continentBounds[d.id];
 
        var dx = bbox.width, 
         dy = bbox.height, 
@@ -605,7 +612,7 @@
     var  scale   = zoomFactor / Math.max(dx / width, dy / height),
         translate = [width / 2 - scale * x, height / 2 - scale * y];
 
-   this.parent.zoomBehavior.scale(scale).translate(translate); 
+   self.parent.zoomBehavior.scale(scale).translate(translate); 
       
 
     self.svg.selectAll("path")

@@ -152,9 +152,7 @@ WorldMap.prototype.initVis = function(){
 
 
  this.wrangleData(null);
-
   this.updateVis();
-
   this.setHeatMap();
 }
 
@@ -361,10 +359,53 @@ WorldMap.prototype.addBackToWorldButton = function(container){
           });
 
       })
-
-
       button.text("↩ To World Map");
 }
+
+WorldMap.prototype.backToWorldMap = function (){
+  var that = this;
+  that.map.svg.selectAll("g")
+          .transition()
+          .duration(750)
+          .style("opacity", 0)
+          .call(that.map.endAll, function () {
+            button.attr("style", "display: none");
+
+            that.map.updateScope("world");
+            that.zoomBehavior.scale(1).translate([0, 0]);  
+            that.map.resetZoom();
+
+            that.wrangleData(null);
+            that.updateVis(); 
+
+
+            that.map.svg.selectAll("g")
+              .transition()
+              .duration(750)
+              .delay(750)
+              .style("opacity", 1)
+              .call(that.map.endAll, function () {
+
+              d3.select("#addBackToWorldButton").attr("style", "display:none");
+              d3.select("#addResetZoomButton").attr("style", "");
+
+                //TODO: set a default filter 
+                that.map.options.done(that.map);
+
+                $(that.eventHandler).trigger("selectionChanged", {level: "world" });
+              });
+          });
+
+}
+
+WorldMap.prototype.zoomCountry = function(d){
+    var subitem = d3.selectAll('.datamaps-subunit')[0].filter(function(d){
+      return (d.__data__.id=="JPN")
+    })[0];
+    debugger;
+    this.map.publicZoom.call(this.map, subitem["__data__"]);
+}
+
 
 // HELPERS
 
