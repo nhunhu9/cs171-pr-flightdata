@@ -558,11 +558,11 @@
     }
 
   }
-<<<<<<< HEAD
+
   
  function clickZoom(d) {
     var self = this,
-=======
+
 
 Datamap.prototype.publicZoom = function(d){
   return clickZoom(d, this);
@@ -573,7 +573,6 @@ Datamap.prototype.publicZoom = function(d){
       var self = this;
     }
     var 
->>>>>>> origin/master
         zoomFactor  = self.options.zoomConfig.zoomFactor,
         width   = self.options.element.clientWidth,
         height  = self.options.element.clientHeight,
