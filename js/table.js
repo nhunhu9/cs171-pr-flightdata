@@ -101,6 +101,11 @@ Table.prototype.onSelectionChange= function (ranges){
     d3.select("#airline_ranking_wrapper").remove()
     draw(new_data)
   }
+  if(ranges.level == "world")
+  {
+    d3.select("#airline_ranking_wrapper").remove()
+    draw(this.data);
+  }
   
 
 
