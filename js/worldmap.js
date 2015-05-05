@@ -35,7 +35,7 @@ WorldMap.prototype.initVis = function(){
       }))
 
   this.arcWidthScale = d3.scale.log()
-    .range([0.4, 2]);
+    .range([0.3, 1.4]);
 
   this.arcOpacityScale = d3.scale.log()
     .range([0.01, 1.0]);
@@ -46,8 +46,8 @@ WorldMap.prototype.initVis = function(){
     element: document.getElementById("worldmap"),
     projection: "mercator",
     arcConfig: {
-      //strokeColor: "darkblue",
-      strokeWidth: 1,
+      strokeColor: "#3333CC",
+      strokeWidth: 0.3,
       arcSharpness: 0.5,
       animationSpeed: 500
     },
@@ -170,6 +170,7 @@ WorldMap.prototype.setHeatMap= function(){
   var heatmap_field = function(d){return parseInt(d.data["Tourism expenditure in other countries"]["2012"].removeComma())};
   var o =  d3.scale.linear()//d3.scale.ordinal()
       .domain(d3.extent(that.UNData,heatmap_field)) 
+     //.range(["white", "steelblue"]);
      .range(["white", "steelblue"]);
 
     this.UNData.forEach(function(d) {
@@ -211,7 +212,7 @@ WorldMap.prototype.setHeatMap= function(){
       .attr("x", 0 + 20)
       .attr("y", 10)
       .attr("dy", ".35em")
-      .text("Tourism expenditure abroad:");
+      .text("Tourism expenditure abroad (US$ Mn):");
 
 
 }
@@ -237,7 +238,8 @@ if (this.args == null || this.args.level == null)
   
 
   this.displayData = this.completeTable.filter(function(d) { return d.airline_name == airline_name; }).filter(level_filter);
-  this.updateVis();
+
+  this.updateVis(true);
 }
 
 WorldMap.prototype.filterAndAggregate = function(_filter, level){
@@ -275,20 +277,21 @@ WorldMap.prototype.filterAndAggregate = function(_filter, level){
 
 
 
-WorldMap.prototype.updateVis = function(){
+WorldMap.prototype.updateVis = function(no_color){
   var that = this;
 
 
   this.arcOpacityScale.domain(d3.extent(d3.selectAll(".datamaps-arc"), function(l) { 
     return l.number_of_routes; }));
 
-  this.displayData.forEach(function(d){
-    d.options = {};
-    d.options.strokeColor = that.arc_color_scale(d.number_of_routes);
-    d.options.strokeWidth = that.arcWidthScale(d.number_of_routes);
-    d.options.greatArc = true;
-  })
-
+  if (!no_color) {
+    this.displayData.forEach(function(d){
+      d.options = {};
+      d.options.strokeColor = that.arc_color_scale(d.number_of_routes);
+      d.options.strokeWidth = that.arcWidthScale(d.number_of_routes);
+      d.options.greatArc = true;
+    })
+  }
   this.map.arc(this.displayData);
 
 
