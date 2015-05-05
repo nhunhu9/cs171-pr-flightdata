@@ -250,6 +250,11 @@ margin-bottom: 50px;
     margin-right: 3px;
 }
 
+#heatmap_legend {
+  position: absolute;
+  top: 600px;
+  left: 40px;
+}
 #lineheading {
   width: 550px;
 }

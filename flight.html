@@ -35,6 +35,8 @@
 
 </head>
 <body>
+
+<svg id="heatmap_legend"></svg>
 <div class="container" >
     <!-- row 1: navigation -->
     <header class="nav">
@@ -174,7 +176,7 @@
                 var barchart2 = new BarChart(d3.select("#barchart2"), metaDataCities, MyEventHandler);  
                  var table = new Table(d3.select("table"), completeData, MyEventHandler);
 
-                var worldmap = new WorldMap(d3.select("#worldmap"), citiesToCities, metaDataCities, countriesToCountries, completeTable, MyEventHandler);
+                var worldmap = new WorldMap(d3.select("#worldmap"), citiesToCities, metaDataCities, countriesToCountries, completeTable, UNData, MyEventHandler);
                 var linechart = new LineChart(d3.select("#linechart"), UNData, MyEventHandler);
                 
                 $(MyEventHandler).bind("selectionChanged", function(event, args){
@@ -182,6 +184,7 @@
                     barchart2.onSelectionChange(args);
                     linechart.onSelectionChange(args);
                     table.onSelectionChange(args);
+                    worldmap.onSelectionChange(args);
 
                     worldmap.args = args;
         

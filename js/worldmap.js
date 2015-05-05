@@ -1,4 +1,4 @@
-WorldMap = function(_parentElement, _data, _metaData, _countriesToCountries, _completeTable, _eventHandler){
+WorldMap = function(_parentElement, _data, _metaData, _countriesToCountries, _completeTable, _UNData, _eventHandler){
 
   var that = this;
   
@@ -7,12 +7,13 @@ WorldMap = function(_parentElement, _data, _metaData, _countriesToCountries, _co
   this.metaData = _metaData;
   this.countriesToCountries = _countriesToCountries;
   this.completeTable = _completeTable;
+  this.UNData = _UNData;
   this.eventHandler = _eventHandler;
   this.displayData = [];
 
   this.args = null;
 
-  this.selectableCountries = ["Americas",  "Africa",  "Asia",  "Europe",  "Oceania","USA", "DEU", "JPN", "VNM"];
+  this.selectableCountries = ["Americas",  "Africa",  "Asia",  "Europe",  "Oceania","USA", "DEU", "JPN", "VNM", "CHN"];
 
   this.initVis();
 }
@@ -21,7 +22,6 @@ WorldMap = function(_parentElement, _data, _metaData, _countriesToCountries, _co
 WorldMap.prototype.initVis = function(){
 
   var that = this; 
-
 
   d3.select("#routevis").on("click", function(d) { 
     console.log(that.zoomBehavior.scale());
@@ -67,13 +67,16 @@ WorldMap.prototype.initVis = function(){
       d3.selectAll("path.datamaps-subunit").filter(function(d) {
         return that.selectableCountries.indexOf(d.id) >= 0;
       })
-      .style("stroke", "black")
+      .style("stroke", "red")
       .each(function() { this.parentNode.appendChild(this); });;
     },
     subunitClick: function(g) {
       that.wrangleData(null);
+
       if(g.type == "Feature")
       {
+
+        d3.select("#heatmap_legend").style("display", "none");
         d3.select(".btn-group").disabled = true;
         d3.select(".btn-group").style("opacity", "0.5");
       }
@@ -151,7 +154,70 @@ WorldMap.prototype.initVis = function(){
  this.wrangleData(null);
 
   this.updateVis();
+
+  this.setHeatMap();
 }
+
+WorldMap.prototype.onSelectionChange= function (args){
+  if (args.level == "world") 
+    this.setHeatMap();
+}
+
+// level: default: city, alternative: country
+WorldMap.prototype.setHeatMap= function(){
+  var that = this;
+  var choropleth = {};
+
+
+  var heatmap_field = function(d){return parseInt(d.data["Tourism expenditure in other countries"]["2012"].removeComma())};
+  var o =  d3.scale.linear()//d3.scale.ordinal()
+      .domain(d3.extent(that.UNData,heatmap_field)) 
+     .range(["white", "steelblue"]);
+
+    this.UNData.forEach(function(d) {
+      var geometry = that.map.worldTopo.objects.world.geometries.filter(function(b){return d.name == b.properties.name;})[0]
+      
+      if (geometry) {
+        choropleth[geometry.id] = o(heatmap_field(d)); 
+      }
+    });
+
+    this.map.updateChoropleth(choropleth);
+
+    d3.select("#heatmap_legend").style("display", "");
+
+  var heatmap_svg = d3.select("#heatmap_legend");
+
+    heatmap_svg.selectAll(".legend").remove();
+
+     // Add a legend for the color values.
+  var legend = heatmap_svg.selectAll(".legend")
+      .data(o.ticks(6).slice(1).reverse())
+    .enter().append("g")
+      .attr("class", "legend")
+      .attr("transform", function(d, i) { return "translate(" + (0 + 20) + "," + (20 + i * 20) + ")"; });
+
+  legend.append("rect")
+      .attr("width", 20)
+      .attr("height", 20)
+      .style("fill", o);
+
+  legend.append("text")
+      .attr("x", 26)
+      .attr("y", 10)
+      .attr("dy", ".35em")
+      .text(String);
+
+  heatmap_svg.append("text")
+      .attr("class", "label")
+      .attr("x", 0 + 20)
+      .attr("y", 10)
+      .attr("dy", ".35em")
+      .text("Tourism expenditure abroad:");
+
+
+}
+
 
 // level: default: city, alternative: country
 WorldMap.prototype.wrangleData= function(_filterFunction, level){
@@ -200,7 +266,7 @@ WorldMap.prototype.filterAndAggregate = function(_filter, level){
   if (this.args == null || this.args.level == null)
         var level_filter = function (d) { return true;}
    else if (this.args.level == "continent")
-        var level_filter = function (d) { return d.destination.continent == that.args.subitemClicked.id && d.origin.continent == that.args.subitemClicked.id ;}
+        var level_filter = function (d) { return d.destination.continent ==  d.origin.continent ;}
     else if (this.args.level == "country")
         var level_filter = function (d) { return d.destination.country == that.args.subitemClicked.properties.name && d.origin.country == that.args.subitemClicked.properties.name;}  
 
@@ -301,8 +367,4 @@ WorldMap.prototype.addBackToWorldButton = function(container){
 }
 
 // HELPERS
-
-
-
-
 
