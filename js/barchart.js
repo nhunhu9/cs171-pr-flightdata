@@ -75,7 +75,7 @@ BarChart.prototype.initVis = function(){
   this.width = width = 500 - margin.left - margin.right;
   this.height = height = 150 - margin.top - margin.bottom;
 
-   this.titleElement = d3.select("#barchart2").insert("h3")
+   this.titleElement = d3.select("#barchart2").insert("h2")
     .attr("class", "heading")
     .attr("transform", "translate(" + -margin.left + ",0)");
   
