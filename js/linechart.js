@@ -6,12 +6,13 @@ LineChart = function(_parentElement, _data, _eventHandler){
   this.displayData = [];
   this.color = d3.scale.category10()
   this.countries = 5;
+  this.title = "Top arrivals of non-resident passengers";
+  this.selection;
 
 
   this.margin = {top: 20, right: 20, bottom: 170, left: 60},
   this.width =  500 - this.margin.left - this.margin.right,
   this.height = 380 - this.margin.top - this.margin.bottom;
-  console.log(_data);
   this.initVis();
 }
 
@@ -90,17 +91,21 @@ LineChart.prototype.filterAndAggregate = function(ranges){
 
     if(ranges == null) {
       this.countries = 5;
+      this.selection = "(Wordwide)";
       return this.data;
     } else if(ranges["level"] == "world") {
       this.countries = 5;
+      this.selection = "(Wordwide)";
       return this.data;
     } else if (ranges["level"] == "country") {
       this.countries = 1;
+      this.selection = "(" + ranges["subitemClicked"]["properties"]["name"] + ")";
       return this.data.filter(function(d){
         return d["name"] == ranges["subitemClicked"]["properties"]["name"];
       });
     } else if (ranges["level"] == "continent") {
       this.countries = 5;
+      this.selection = "(" + ranges["subitemClicked"]["id"] + ")";
       return this.data.filter(function(d){
         return d["continent"] == ranges["subitemClicked"]["id"];
       });
@@ -109,6 +114,9 @@ LineChart.prototype.filterAndAggregate = function(ranges){
 
 LineChart.prototype.updateVis = function(){
   var that = this;
+
+  debugger;
+  this.titleElement = d3.select("#lineheading").text("" + this.title + " " + this.selection);
 
   this.svg.selectAll(".lines").remove();
   this.svg.selectAll(".legend").remove();
