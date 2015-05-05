@@ -96,12 +96,12 @@
           <div class="panel panel-default">
             <div class="panel-heading">
               <h4  id="story1-title" class="panel-title">
-                    <a href="#story1" class="accordion-toggle" data-toggle="collapse" data-parent="#accordion"><span class="glyphicon glyphicon-plane"></span> East vs West, within China</a>
+                    <a href="#story1" class="accordion-toggle" data-toggle="collapse" data-parent="#accordion"><span class="glyphicon glyphicon-plane"></span> East vs West, in the East</a>
               </h4>
             </div>
                 <div id="story1" class="panel-collapse collapse">
               <div class="panel-body">
-                <p></p>
+                <p>"East vs West" seems to be a paradox occuring not only on the global scale, but also even more locally within the China. It has been recently reported that the gap between China’s rich and poor is now one of the world’s highest, surpassing even that in the U.S. This visualization enables us to also understand the scale of geographic inequalities between the cities, in which the urban east is far better connected than the rural west.</p>
               </div>
             </div>
           </div>     
@@ -109,12 +109,12 @@
           <div class="panel panel-default">
             <div class="panel-heading">
               <h4 id="story2-title" class="panel-title">
-                <a href="#story2" class="accordion-toggle" data-toggle="collapse" data-parent="#accordion"><span class="glyphicon glyphicon-plane"></span> Story 2 Title</a>
+                <a href="#story2" class="accordion-toggle" data-toggle="collapse" data-parent="#accordion"><span class="glyphicon glyphicon-plane"></span> United, united</a>
               </h4>
             </div>
             <div id="story2" class="panel-collapse collapse">
               <div class="panel-body">
-                <p>Story 2</p>
+                <p>In 2012, United Airlines merged with Continental Airlines to surpass Delta in becoming the world largest carrier. Prior to the merger, United offered a hub at Narita Airport, Tokyo, to serve non-stop flights from Tokyo to such locations as Seattle, Chicago, Honolulu, Hong Kong and Seoul, South Korea. Continental, on the other hand, has an airport hub at Guam International Airport. Both of these are visible under the United Airline name on the world map.</p>
                </div>
             </div>
           </div>     
@@ -198,7 +198,6 @@
             var dataLoaded = function (error, _citiesToCities, _metaDataCities, _completeTable, _airlineRouteCounts, _countriesToCountries, _countryList, _UNData) {
 
                 if (!error) {
-
                         countryList = {};
                     _countryList.map(function(d){
                         countryList[d["name"]] = d["continent"];
@@ -206,7 +205,7 @@
 
                     citiesToCities = _citiesToCities;
 
-                     completeTable = _completeTable.map(function (d) {
+                    completeTable = _completeTable.map(function (d) {
             
                             return {
                                 origin: {
@@ -338,11 +337,7 @@
                 }
             }
 			
-
-			
 			// HELPERS 
-
-
             var dateFormat = d3.time.format("%Y-%m-%d");
 
             var startHere = function(){
@@ -350,7 +345,7 @@
             	queue()
                 .defer(d3.json, 'data/openflight_db/citiesToCities_noduplicates.json')
                 .defer(d3.csv, 'data/openflight_db/citiesTable.csv')
-                .defer(d3.csv, 'data/openflight_db/completeTable.csv')  
+                .defer(d3.csv, 'data/openflight_db/completeTable-rmcont.csv')  
                 .defer(d3.json, 'data/openflight_db/airlineRoutesCounts.json')  
                 .defer(d3.csv, 'data/openflight_db/countriesToCountries.csv') 
                 .defer(d3.csv, 'data/countrylist.csv')

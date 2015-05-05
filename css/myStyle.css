@@ -254,6 +254,7 @@ margin-bottom: 50px;
   position: absolute;
   top: 600px;
   left: 40px;
+  z-index: 100;
 }
 #lineheading {
   width: 550px;
