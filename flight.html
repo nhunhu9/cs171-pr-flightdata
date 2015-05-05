@@ -183,6 +183,9 @@
                 });
 
                 $("#story2-title").on("click", function(){
+                    if(worldmap.args.level=="country" || worldmap.args.level=="countinent") {
+                        worldmap.backToWorldMap();
+                    }
                     worldmap.showAirlineRoutes("United Airlines");
                 });
 
