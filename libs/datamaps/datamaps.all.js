@@ -558,7 +558,7 @@
     }
 
   }
-
+  
  function clickZoom(d) {
     var self = this,
         zoomFactor  = self.options.zoomConfig.zoomFactor,

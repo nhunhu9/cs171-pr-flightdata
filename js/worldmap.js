@@ -77,6 +77,7 @@ WorldMap.prototype.initVis = function(){
       {
 
         d3.select("#heatmap_legend").style("display", "none");
+        that.map.options["fills"]["defaultFill"] = "#ABDDA4";
         d3.select(".btn-group").disabled = true;
         d3.select(".btn-group").style("opacity", "0.5");
       }
@@ -159,9 +160,10 @@ WorldMap.prototype.initVis = function(){
 }
 
 WorldMap.prototype.onSelectionChange= function (args){
-  if (args.level == "world") 
+  if (args.level == "world")  {
     this.setHeatMap();
 }
+  }
 
 // level: default: city, alternative: country
 WorldMap.prototype.setHeatMap= function(){
@@ -182,6 +184,8 @@ WorldMap.prototype.setHeatMap= function(){
         choropleth[geometry.id] = o(heatmap_field(d)); 
       }
     });
+
+    choropleth["GRL"] = choropleth["COD"] = choropleth["TZA"] = choropleth["SOM"] = choropleth["CIV"] = choropleth["SYR"] = choropleth["COG"] = choropleth["SSD"] = choropleth["HRV"] = choropleth["SIB"]= choropleth["SRB"]= choropleth["MKD"]=choropleth["LTU"]=choropleth["LAO"]= choropleth["BIH"] = choropleth["MDA"] = "#FFFFFF";
 
     this.map.updateChoropleth(choropleth);
 
