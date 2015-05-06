@@ -206,12 +206,12 @@
                 });
 
                 $("#story1-title").on("click", function(){
-                    $("html, body").animate({ scrollTop: 0 }, "slow");
+                    // $("html, body").animate({ scrollTop: 0 }, "slow");
                     worldmap.zoomCountry("CHN");
                 });
 
                 $("#story2-title").on("click", function(){
-                    $("html, body").animate({ scrollTop: 0 }, "slow");
+                    // $("html, body").animate({ scrollTop: 0 }, "slow");
                     if (!worldmap.args || worldmap.args.level == "world") {
                         worldmap.showAirlineRoutes("United Airlines");
                     }
@@ -224,7 +224,7 @@
                 });
 
                 $("#story3-title").on("click", function(){
-                    $("html, body").animate({ scrollTop: 0 }, "slow");
+                    // $("html, body").animate({ scrollTop: 0 }, "slow");
                     // africa connections with other continents
                     // if (!worldmap.args || worldmap.args.level == "world") {
                     //     setTimeout(function(){
@@ -258,7 +258,7 @@
                 });
 
                 $("#story4-title").on("click", function(){
-                    $("html, body").animate({ scrollTop: 0 }, "slow");
+                    // $("html, body").animate({ scrollTop: 0 }, "slow");
                     if (!worldmap.args || worldmap.args.level == "world") {
                         linechart.wrangleData("story");
                         linechart.updateVis();
@@ -273,7 +273,7 @@
                 });
 
                 $("#story5-title").on("click", function(){
-                    $("html, body").animate({ scrollTop: 0 }, "slow");
+                    // $("html, body").animate({ scrollTop: 0 }, "slow");
                     function israelVis() {
                         worldmap.wrangleData(function(d){ 
                             return (d.origin.country == "Israel" || d.destination.country == "Israel")}, "country");
