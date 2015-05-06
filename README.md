@@ -36,4 +36,5 @@ Templates or guides that were used for parts of the code are indicated in the pr
 
 #Non obvious features
 Clicking on an airline in the airlines table will visualize the flight network of the airline on the map.
+
 All data shown is from 2012, if not indicated otherwise
