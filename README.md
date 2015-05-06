@@ -6,9 +6,9 @@
 	<img src="img/screenshot.png" width="800"/>
 </p>
 
-Process Book can be found [here](http://maza5296.github.io/cs171-project/).
+Process Book can be found [here](http://maza5296.github.io/cs171-project/documentation/ProcessBook.pdf).
 
-Design Studio feedback can be found [here](https://www.youtube.com/watch?v=ajYWUTMBjZY&feature=youtu.be).
+Video can be found [here](https://www.youtube.com/watch?v=ajYWUTMBjZY&feature=youtu.be).
 
 
 
