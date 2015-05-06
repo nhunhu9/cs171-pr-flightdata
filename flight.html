@@ -93,18 +93,6 @@
          <h2 class="heading storyheading">Stories</h2>
          <div class="storypanel">
           
-          <div class="panel panel-default">
-            <div class="panel-heading">
-              <h4 id="story2-title" class="panel-title">
-                <a href="#story2" class="accordion-toggle" data-toggle="collapse" data-parent="#accordion"><span class="glyphicon glyphicon-plane"></span> United, United</a>
-              </h4>
-            </div>
-            <div id="story2" class="panel-collapse collapse">
-              <div class="panel-body">
-                <p>In 2012, United Airlines merged with Continental Airlines to surpass Delta in becoming the world largest carrier. Prior to the merger, United offered a hub at Narita Airport, Tokyo, to serve non-stop flights from Tokyo to such locations as Seattle, Chicago, Honolulu, Hong Kong and Seoul, South Korea. Continental, on the other hand, has an airport hub at Guam International Airport. Both of these are visible under the United Airline name on the world map.</p>
-               </div>
-            </div>
-          </div>  
 
           <div class="panel panel-default">
             <div class="panel-heading">
@@ -128,6 +116,30 @@
               </div>
             </div>
           </div>  
+           <div class="panel panel-default">
+            <div class="panel-heading">
+              <h4 id="story2-title" class="panel-title">
+                <a href="#story2" class="accordion-toggle" data-toggle="collapse" data-parent="#accordion"><span class="glyphicon glyphicon-plane"></span> United, United</a>
+              </h4>
+            </div>
+            <div id="story2" class="panel-collapse collapse">
+              <div class="panel-body">
+                <p>In 2012, United Airlines merged with Continental Airlines to surpass Delta in becoming the world largest carrier. Prior to the merger, United offered a hub at Narita Airport, Tokyo, to serve non-stop flights from Tokyo, while Continental, on the other hand, has an airport hub at Guam International Airport. Both of these are visible under the United Airline name on the world map.</p>
+               </div>
+            </div>
+          </div>   
+          <div class="panel panel-default">
+            <div class="panel-heading">
+              <h4 id="story5-title" class="panel-title">
+                <a href="#story5" class="accordion-toggle" data-toggle="collapse" data-parent="#accordion"><span class="glyphicon glyphicon-plane"></span> Israeli Isolation</a>
+              </h4>
+            </div>
+            <div id="story5" class="panel-collapse collapse">
+              <div class="panel-body">
+                <p>This visualization shows there are extremely few flights that connect Israel with nearby Arab countries. For the majority of the other countries, the flight connections are very frequent in their neighbors; clearly Israel seems to be an exception to the rule. This data can speak directly to the political relationships between the countries in the Arab world; an extremely interesting find!</p>
+               </div>
+            </div>
+          </div>   
           <div class="panel panel-default">
             <div class="panel-heading">
               <h4 id="story4-title" class="panel-title">
@@ -141,7 +153,7 @@
                     <a href="http://www.abs-cbnnews.com/business/01/28/10/2009-was-worst-year-aviation-industry-capa-report">Source</a></p>
               </div>
             </div>
-          </div>       
+          </div>      
         </div><!-- end accordion --> 
     </div>
 
@@ -228,7 +240,7 @@
                                 worldmap.wrangleData(function(d) { return d.origin.continent == "Africa"  && d.destination.continent == "Africa"}, "country");
                                 worldmap.updateVis();
                             }, 2500);
-                        }, 3000);
+                        }, 2500);
                     }
                     if (!worldmap.args || worldmap.args.level == "world") {
                         afriVis();
@@ -252,6 +264,22 @@
                             linechart.wrangleData("story");
                             linechart.updateVis();   
                         }, 2200);
+                    }
+                });
+
+                $("#story5-title").on("click", function(){
+                    function israelVis() {
+                        worldmap.wrangleData(function(d){ 
+                            return (d.origin.country == "Israel" || d.destination.country == "Israel")}, "country");
+                        worldmap.updateVis();
+                    }
+                    if (!worldmap.args || worldmap.args.level == "world") {
+                        israelVis();
+                    } else {
+                        worldmap.backToWorldMap();
+                        setTimeout(function(){
+                            israelVis();
+                        }, 2000);
                     }
                 });
 
