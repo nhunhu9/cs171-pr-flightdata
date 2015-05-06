@@ -209,22 +209,35 @@
                 });
 
                 $("#story3-title").on("click", function(){
-                    if (!worldmap.args || worldmap.args.level == "world") {
-                        worldmap.map.zoomContinent("Africa");
+                    // africa connections with other continents
+                    // if (!worldmap.args || worldmap.args.level == "world") {
+                    //     setTimeout(function(){
+                    //             worldmap.wrangleData(function(d) { 
+                    //                 return (d.destination.continent != d.origin.continent) && (d.origin.continent == "Africa" || d.destination.continent == "Africa")}, "country");
+                    //             worldmap.updateVis();
+                    //         }, 2500);
+                    // }
+                    function afriVis() {
+                        worldmap.wrangleData(function(d){ 
+                                    return (d.destination.continent != d.origin.continent) && 
+                                    (d.origin.continent == "Africa" || d.destination.continent == "Africa")}, "country");
+                        worldmap.updateVis();
                         setTimeout(function(){
-                                worldmap.wrangleData(function(d) { return d.origin.continent == "Africa"  && d.destination.continent != "Africa"}, "country");
+                            worldmap.map.zoomContinent("Africa");
+                            setTimeout(function(){
+                                worldmap.wrangleData(function(d) { return d.origin.continent == "Africa"  && d.destination.continent == "Africa"}, "country");
                                 worldmap.updateVis();
                             }, 2500);
+                        }, 3000);
+                    }
+                    if (!worldmap.args || worldmap.args.level == "world") {
+                        afriVis();
                     }
                     else if(worldmap.args.level=="country" || worldmap.args.level=="continent") {
                         worldmap.backToWorldMap();
                         setTimeout(function(){
-                            worldmap.map.zoomContinent("Africa");
-                            setTimeout(function(){
-                                worldmap.wrangleData(function(d) { return d.origin.continent == "Africa"  || d.destination.continent == "Africa"}, "country");
-                                worldmap.updateVis();
-                            }, 2500);
-                        }, 1500);
+                            afriVis();
+                        }, 2200);
                     }
                 });
 
